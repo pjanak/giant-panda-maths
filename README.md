@@ -46,4 +46,6 @@ Open **Settings** at the bottom of the home screen for a study timer (15–45 mi
 
 ## Running it
 
+Live at **https://giant-panda-maths.pages.dev** (Cloudflare Pages, redeploys on every push to `main`).
+
 It's a single static file with no build step. Open `index.html` in a browser, or host the folder on any static host (GitHub Pages, Cloudflare Pages, Netlify).
