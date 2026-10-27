@@ -1,0 +1,1076 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Giant Panda Maths</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Lexend:wght@400;600&display=swap">
+<style>
+/* Layout: one-column phone app, the KS3 member of the Panda Maths family. Graph-paper notebook look for 11–14 year olds: squared page, ink-blue text, a few strong accents. Sticky top bar with XP and level, home grid of eight tiles in two groups, each game one screen: question card, working (number line, ladder, balance, diagram), then a number pad or answer buttons. Single light look by choice. */
+:root{
+  --page:#F3F6FA; --line:#DCE5F0; --paper:#FFFFFF; --ink:#1C2340; --ink-soft:#5B6482; --scrim:rgba(20,26,50,.6);
+  --teal:#0E9F8E; --teal-soft:#D5F3EF; --teal-deep:#08766A;
+  --indigo:#4F46E5; --indigo-soft:#E2E1FC; --indigo-deep:#3730A3;
+  --coral:#F0614F; --coral-soft:#FDE3DF; --coral-deep:#C23B2B;
+  --amber:#F4A51C; --amber-soft:#FDF0D3; --amber-deep:#B97300;
+  --violet:#9B4DE0; --violet-soft:#F0E2FC; --violet-deep:#6F2BAF;
+  --cheek:#FF8FB5;
+  --display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --body:"Lexend","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --math:"Lexend","Avenir Next",system-ui,sans-serif;
+  --han:"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif;
+  color-scheme:light;
+}
+html,body{height:100%}
+body{
+  background:var(--page);
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:24px 24px;
+  color:var(--ink); font-family:var(--body); font-size:17px; line-height:1.5;
+  -webkit-tap-highlight-color:transparent;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--page)}
+button{font:inherit;color:inherit;touch-action:manipulation;cursor:pointer}
+button:focus-visible,summary:focus-visible{outline:3px solid var(--indigo);outline-offset:3px}
+.app{
+  max-width:560px; margin:0 auto; min-height:100%;
+  display:flex; flex-direction:column;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+i.v{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:600}
+
+/* Top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;align-items:center;gap:8px;padding-block:10px;background:var(--page)}
+.brand{flex:1;display:flex;align-items:center;gap:8px;min-width:0;font-family:var(--display);font-weight:800;font-size:19px;line-height:1.05}
+.brand svg{width:36px;height:36px;flex:none}
+.in-game .brand-name,.timing .brand-name{display:none}
+.icon-btn{width:44px;height:44px;border-radius:14px;border:2px solid var(--line);background:var(--paper);display:grid;place-items:center;flex:none}
+.icon-btn svg{width:24px;height:24px}
+.xp{display:flex;flex-direction:column;align-items:flex-end;flex:none;background:var(--ink);color:var(--paper);border-radius:14px;padding:5px 12px;line-height:1.1}
+.xp b{font-family:var(--display);font-weight:800;font-size:18px;font-variant-numeric:tabular-nums}
+.xp small{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--amber)}
+.xp.bump{animation:bump .5s cubic-bezier(.3,1.8,.5,1)}
+.timer-pill{display:flex;align-items:center;gap:4px;flex:none;background:var(--paper);border:2px solid var(--line);border-radius:14px;padding:6px 10px 6px 7px;font-family:var(--display);font-weight:800;font-size:18px;line-height:1;font-variant-numeric:tabular-nums}
+.timer-pill svg{width:20px;height:20px}
+.timer-pill.low{background:var(--coral);border-color:var(--coral);color:var(--paper);animation:bump 1s ease-in-out infinite}
+
+main{flex:1;padding-block:6px 40px}
+.screen{display:flex;flex-direction:column;gap:16px}
+
+/* Home */
+.hello{display:flex;align-items:center;gap:12px;background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:12px 14px}
+.hello .panda-btn{border:0;background:none;padding:0;width:72px;height:72px;flex:none}
+.hello .panda-btn svg{width:100%;height:100%}
+.panda-btn.wiggle svg{animation:wiggle .6s ease}
+.hello h1{margin:0;font-family:var(--display);font-weight:800;font-size:24px;line-height:1.05;text-wrap:balance}
+.hello p{margin:4px 0 0;font-size:15px;color:var(--ink-soft);line-height:1.4}
+.levels{display:flex;align-items:center;gap:6px;background:var(--paper);border:2px solid var(--line);border-radius:18px;padding:5px}
+.lv-label{font-family:var(--display);font-weight:800;font-size:15px;line-height:1.1;padding-inline:8px 4px;flex:none}
+.lv{flex:1;min-width:0;border:0;border-radius:13px;padding:8px 4px;background:transparent;color:var(--ink-soft);font-family:var(--display);font-weight:800;font-size:17px;line-height:1}
+.lv[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.section-h{margin:4px 0 -6px;font-family:var(--display);font-weight:800;font-size:20px;line-height:1.1}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{
+  --c:var(--teal);--cs:var(--teal-soft);--cd:var(--teal-deep);
+  border:2px solid var(--line);border-top:6px solid var(--c);border-radius:18px;padding:12px 13px 14px;text-align:left;
+  background:var(--paper);display:flex;flex-direction:column;gap:3px;min-width:0;
+  transition:transform .12s,border-color .12s;
+}
+.tile:active{transform:translateY(3px)}
+.tile.indigo{--c:var(--indigo);--cs:var(--indigo-soft);--cd:var(--indigo-deep)}
+.tile.coral{--c:var(--coral);--cs:var(--coral-soft);--cd:var(--coral-deep)}
+.tile.amber{--c:var(--amber);--cs:var(--amber-soft);--cd:var(--amber-deep)}
+.tile.violet{--c:var(--violet);--cs:var(--violet-soft);--cd:var(--violet-deep)}
+.seal{display:inline-flex;align-items:center;align-self:flex-start;background:var(--cs,var(--teal-soft));color:var(--cd,var(--teal-deep));font-family:var(--han);font-weight:700;font-size:15px;letter-spacing:.06em;border-radius:8px;padding:2px 8px;line-height:1.4;white-space:nowrap}
+.tile .art{height:44px;display:flex;align-items:center;font-family:var(--math);font-weight:600;font-size:21px;color:var(--cd);white-space:nowrap;font-variant-numeric:tabular-nums}
+.tile h3{margin:0;font-family:var(--display);font-weight:800;font-size:19px;line-height:1.1;text-wrap:balance}
+.tile .py{font-size:12px;color:var(--ink-soft);letter-spacing:.02em}
+.tile p{margin:2px 0 0;font-size:13.5px;line-height:1.35;color:var(--ink-soft)}
+
+.grown{background:var(--paper);border:2px solid var(--line);border-radius:18px;padding:2px 16px;font-size:15px;color:var(--ink-soft)}
+.grown summary{font-family:var(--display);font-weight:800;font-size:17px;color:var(--ink);padding-block:10px;cursor:pointer}
+.grown p,.grown li{max-width:62ch}
+.grown ul{padding-left:20px;margin-top:0}
+.grown li{margin-bottom:8px}
+.grown .zh{font-family:var(--han);color:var(--coral-deep);font-weight:700}
+.set-group{display:flex;flex-direction:column;gap:8px;padding-bottom:14px}
+.set-group+.set-group{border-top:2px solid var(--line);padding-top:14px}
+.set-group h4{margin:0;font-family:var(--display);font-weight:800;font-size:16px;color:var(--ink)}
+.set-note{margin:0;font-size:15px}
+.chips{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.chip-btn{border:2px solid var(--line);border-radius:12px;padding:8px 14px;background:var(--paper);color:var(--ink);font-family:var(--display);font-weight:800;font-size:15px;line-height:1}
+.chip-btn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip-btn.danger{background:var(--coral);border-color:var(--coral);color:var(--paper)}
+.chip-btn:disabled{opacity:.4;cursor:default}
+
+/* Game */
+.game-head{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.game-head h2{margin:0;font-family:var(--display);font-weight:800;font-size:24px;line-height:1;flex:1;min-width:0}
+.streak{font-family:var(--display);font-weight:800;font-size:15px;background:var(--amber-soft);color:var(--amber-deep);border-radius:10px;padding:3px 10px;white-space:nowrap}
+.prompt{display:flex;align-items:center;gap:12px;background:var(--paper);border:2px solid var(--line);border-radius:18px;padding:10px 12px}
+.say-btn{width:42px;height:42px;border-radius:12px;border:0;background:var(--teal);display:grid;place-items:center;flex:none}
+.say-btn svg{width:24px;height:24px}
+.prompt p{margin:0;font-weight:600;font-size:17px;line-height:1.35;min-width:0;text-wrap:pretty}
+.stage{display:flex;flex-direction:column;align-items:center;gap:12px;min-height:90px}
+.answers{display:grid;gap:10px;grid-template-columns:repeat(var(--cols,1),minmax(0,1fr))}
+.opt{min-height:58px;border:2px solid var(--line);border-radius:16px;padding:8px 12px;background:var(--paper);color:var(--ink);display:flex;align-items:center;justify-content:center;font-family:var(--math);font-weight:600;font-size:20px;line-height:1.25;transition:transform .1s,opacity .2s;min-width:0;font-variant-numeric:tabular-nums;text-align:center}
+.answers.list .opt{justify-content:flex-start;text-align:left;font-size:17px;padding:10px 16px}
+.opt:active{transform:translateY(3px)}
+.opt.wrong{animation:shake .4s;opacity:.35}
+.opt.right{background:var(--teal);border-color:var(--teal);color:var(--paper);animation:bump .5s cubic-bezier(.3,1.8,.5,1)}
+.next{grid-column:1/-1;height:64px;border:0;border-radius:16px;background:var(--ink);color:var(--paper);font-family:var(--display);font-weight:800;font-size:24px;animation:rise .35s ease-out}
+.fact{margin:0;max-width:380px;background:var(--teal-soft);color:var(--teal-deep);border-radius:14px;padding:10px 14px;font-size:15.5px;line-height:1.5;animation:rise .4s ease-out}
+.fact.miss{background:var(--amber-soft);color:var(--ink)}
+.fact b{color:var(--ink)}
+.hint{margin:0;max-width:380px;background:var(--amber-soft);border-radius:12px;padding:8px 12px;font-size:15px;animation:rise .3s ease-out}
+.hint-btn{border:2px solid var(--line);background:var(--paper);border-radius:12px;padding:6px 12px;font-family:var(--display);font-weight:800;font-size:14px}
+.method{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:-6px}
+.method .hint-btn{display:flex;align-items:center;gap:6px;border-color:var(--amber);color:var(--amber-deep)}
+.method .hint-btn::before{content:"";width:14px;height:14px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 3px var(--amber-soft)}
+.method-box{max-width:400px;background:var(--amber-soft);border-left:5px solid var(--amber);border-radius:12px;padding:10px 14px;font-size:15px;line-height:1.5;animation:rise .3s ease-out}
+.sum{font-family:var(--math);font-weight:600;font-size:34px;line-height:1.25;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 10px;font-variant-numeric:tabular-nums;text-align:center;max-width:100%}
+.sum .q{min-width:1.4em;padding:0 10px;border-radius:12px;border:3px dashed var(--ink-soft);background:var(--paper);color:var(--ink-soft)}
+.sum .q.ok{border:3px solid var(--teal);color:var(--teal-deep)}
+.sum sup{font-size:.6em}
+.word{font-size:16.5px;line-height:1.5;background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:12px 14px;max-width:400px}
+
+/* Number pad: 4 columns so minus and decimal point fit */
+.entry-row{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:8px}
+.entry{min-width:150px;height:56px;box-sizing:border-box;border-radius:14px;background:var(--paper);border:3px solid var(--indigo);font-family:var(--math);font-weight:600;font-size:30px;display:flex;align-items:center;justify-content:center;padding:0 14px;font-variant-numeric:tabular-nums}
+.entry:empty::before{content:"?";color:var(--line)}
+.entry.wrong{animation:shake .4s;border-color:var(--coral)}
+.entry.right{border-color:var(--teal);color:var(--teal-deep)}
+.unit{font-family:var(--math);font-weight:600;font-size:22px;color:var(--ink-soft)}
+.pad{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.key{height:52px;border:2px solid var(--line);border-radius:14px;background:var(--paper);font-family:var(--math);font-weight:600;font-size:24px;line-height:1}
+.key:active{transform:translateY(3px)}
+.key.ok{grid-column:span 2;background:var(--teal);border-color:var(--teal);color:var(--paper)}
+.key.zero{grid-column:span 2}
+.key.del,.key.fn{background:var(--page)}
+.key.off{visibility:hidden}
+
+/* Diagrams */
+.nl,.diagram{width:min(100%,360px);height:auto}
+.nl text,.diagram text{font-family:var(--math);font-weight:600;font-size:14px;fill:var(--ink)}
+.ladder{display:flex;flex-direction:column;font-family:var(--math);font-weight:600;font-size:24px;background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:10px 18px;font-variant-numeric:tabular-nums}
+.lrow{display:grid;grid-template-columns:44px 72px 72px;align-items:center;height:42px}
+.lrow .ld{color:var(--coral-deep);text-align:right;padding-right:10px;height:100%;display:flex;align-items:center;justify-content:flex-end}
+.lrow.div .ld{border-right:3px solid var(--ink)}
+.lrow.div .ln{border-bottom:3px solid var(--ink)}
+.lrow .ln{text-align:center;height:100%;display:flex;align-items:center;justify-content:center}
+.lrow.end .ln{color:var(--teal-deep)}
+.lrow{animation:rise .3s ease-out}
+.balance{width:min(100%,360px);height:auto}
+.balance text{font-family:var(--math);font-weight:600;font-size:17px;fill:var(--ink)}
+.steps{margin:0;padding-left:20px}
+
+/* Overlays */
+.cheer{position:fixed;inset:0;z-index:40;background:var(--scrim);display:grid;place-items:center;padding:24px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px))}
+.cheer-card{background:var(--paper);border-radius:24px;padding:20px 22px 22px;text-align:center;max-width:340px;width:100%;animation:pop .5s cubic-bezier(.3,1.7,.5,1)}
+.cheer-card svg.panda{width:110px;height:110px;animation:hop 1s ease-in-out infinite}
+.cheer-card h2{margin:4px 0;font-family:var(--display);font-weight:800;font-size:32px;color:var(--indigo);line-height:1}
+.cheer-card p{margin:0 0 16px;font-size:17px}
+.cheer-card button{width:100%;height:58px;border:0;border-radius:16px;background:var(--ink);color:var(--paper);font-family:var(--display);font-weight:800;font-size:21px}
+.cheer-card .hold{position:relative;overflow:hidden;margin-top:10px;height:52px;background:var(--page);color:var(--ink);border:2px solid var(--line);font-size:15px;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.cheer-card .hold::before{content:"";position:absolute;inset:0 auto 0 0;width:0;background:var(--teal-soft)}
+.cheer-card .hold.holding::before{width:100%;transition:width 2s linear}
+.cheer-card .hold span{position:relative}
+#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+
+.pk{fill:var(--ink)} .pw{fill:var(--paper)} .pc{fill:var(--cheek);opacity:.75}
+.ps{fill:none;stroke:var(--ink);stroke-width:3.5;stroke-linecap:round}
+.pg{fill:none;stroke:var(--indigo);stroke-width:3.5}
+.ph{fill:var(--coral)}
+
+@keyframes pop{0%{transform:scale(.2)}100%{transform:scale(1)}}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.15)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}50%{transform:translateX(7px)}75%{transform:translateX(-4px)}}
+@keyframes rise{from{transform:translateY(12px);opacity:.3}to{transform:none;opacity:1}}
+@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-10deg)}75%{transform:rotate(10deg)}}
+@keyframes hop{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media (max-width:350px){.tiles{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="bar">
+    <button class="icon-btn" id="homeBtn" aria-label="Back to all topics" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <div class="brand"><span data-panda></span><span class="brand-name">Giant Panda Maths</span></div>
+    <div class="timer-pill" id="timerPill" aria-label="Study time left" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 10v3.5l2.5 1.5M9.5 2.5h5"/></svg>
+      <span id="timerText">0:00</span>
+    </div>
+    <div class="xp" id="xpBox" aria-live="polite"><b id="xpCount">0 XP</b><small id="lvText">Level 1</small></div>
+    <button class="icon-btn" id="soundBtn" aria-label="Turn sound off">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path id="soundWaves" d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/><path id="soundX" d="M17 9l5 6M22 9l-5 6" hidden/></svg>
+    </button>
+  </header>
+
+  <main>
+    <section class="screen" id="home">
+      <div class="hello">
+        <button class="panda-btn" id="pandaBtn" aria-label="Say hello to Bao the panda"><span data-panda></span></button>
+        <div><h1>Key Stage 3, the mastery way</h1><p>Bao's all grown up. Earn XP for every answer and keep your streak going.</p></div>
+      </div>
+      <div class="levels" role="group" aria-label="Year group"><span class="lv-label">Year</span><button class="lv" data-level="easy" aria-pressed="true">Year 7</button><button class="lv" data-level="medium" aria-pressed="false">Year 8</button><button class="lv" data-level="hard" aria-pressed="false">Year 9</button></div>
+
+      <h2 class="section-h">Number</h2>
+      <div class="tiles">
+        <button class="tile coral" data-game="neg">
+          <span class="seal">正负数</span>
+          <span class="art">−5 − (−3) = −2</span>
+          <h3>Negative Numbers</h3>
+          <span class="py">zhèng fù shù</span>
+          <p>Add, subtract, multiply and BIDMAS</p>
+        </button>
+        <button class="tile" data-game="factors">
+          <span class="seal">短除法</span>
+          <span class="art">2 | 24 36</span>
+          <h3>Factors and Primes</h3>
+          <span class="py">duǎn chú fǎ</span>
+          <p>Primes, and HCF and LCM with the ladder</p>
+        </button>
+        <button class="tile indigo" data-game="powers">
+          <span class="seal">乘方</span>
+          <span class="art">3.2 × 10<sup>5</sup></span>
+          <h3>Powers and Standard Form</h3>
+          <span class="py">chéng fāng</span>
+          <p>Squares, index laws, standard form</p>
+        </button>
+        <button class="tile amber" data-game="ratio">
+          <span class="seal">比例</span>
+          <span class="art">× 1.15</span>
+          <h3>Ratio and Percentages</h3>
+          <span class="py">bǐ lì</span>
+          <p>Ratios, multipliers, reverse percentages</p>
+        </button>
+      </div>
+
+      <h2 class="section-h">Algebra and geometry</h2>
+      <div class="tiles">
+        <button class="tile violet" data-game="equations">
+          <span class="seal">方程</span>
+          <span class="art">3<i class="v">x</i> + 5 = 20</span>
+          <h3>Solving Equations</h3>
+          <span class="py">fāng chéng</span>
+          <p>Keep the balance, step by step</p>
+        </button>
+        <button class="tile indigo" data-game="algebra">
+          <span class="seal">代数</span>
+          <span class="art">(<i class="v">x</i> + 3)(<i class="v">x</i> − 5)</span>
+          <h3>Expressions</h3>
+          <span class="py">dài shù</span>
+          <p>Simplify, substitute, expand, factorise</p>
+        </button>
+        <button class="tile" data-game="sequences">
+          <span class="seal">数列</span>
+          <span class="art">5, 8, 11, 14 …</span>
+          <h3>Sequences</h3>
+          <span class="py">shù liè</span>
+          <p>Next terms and the <i class="v">n</i>th term</p>
+        </button>
+        <button class="tile coral" data-game="geometry">
+          <span class="seal">勾股定理</span>
+          <span class="art">3² + 4² = 5²</span>
+          <h3>Angles, Area and Pythagoras</h3>
+          <span class="py">gōu gǔ dìng lǐ</span>
+          <p>From angle facts to right-angled triangles</p>
+        </button>
+      </div>
+
+      <details class="grown" id="settings">
+        <summary>Settings: study timer, XP and voice</summary>
+        <div class="set-group">
+          <h4>Study timer</h4>
+          <p class="set-note">Pick a study session length. A countdown shows at the top.</p>
+          <div class="chips" id="timerChips" role="group" aria-label="Study time">
+            <button class="chip-btn" data-min="0" aria-pressed="true">Off</button>
+            <button class="chip-btn" data-min="15" aria-pressed="false">15 min</button>
+            <button class="chip-btn" data-min="20" aria-pressed="false">20 min</button>
+            <button class="chip-btn" data-min="30" aria-pressed="false">30 min</button>
+            <button class="chip-btn" data-min="45" aria-pressed="false">45 min</button>
+          </div>
+          <p class="set-note" id="timerStatus" hidden></p>
+        </div>
+        <div class="set-group">
+          <h4>Read questions aloud</h4>
+          <p class="set-note">Off by default. The speaker button always reads the question.</p>
+          <div class="chips" id="readChips" role="group" aria-label="Read questions aloud">
+            <button class="chip-btn" data-read="off" aria-pressed="true">Off</button>
+            <button class="chip-btn" data-read="on" aria-pressed="false">On</button>
+          </div>
+        </div>
+        <div class="set-group">
+          <h4>XP</h4>
+          <p class="set-note" id="starNote">No XP yet.</p>
+          <div class="chips" id="resetRow"><button class="chip-btn danger" id="resetBtn">Reset XP to 0</button></div>
+          <div class="chips" id="confirmRow" hidden><span class="set-note" id="confirmText"></span><button class="chip-btn danger" id="resetYes">Yes, reset</button><button class="chip-btn" id="resetNo">Cancel</button></div>
+        </div>
+      </details>
+
+      <details class="grown">
+        <summary>For parents and teachers: what this covers</summary>
+        <p>Each topic follows the Key Stage 3 maths programme of study for England, set by year group: Year 7, Year 8 or Year 9. The methods are the ones used in "maths mastery" classrooms, which grew out of the England–Shanghai teacher exchange.</p>
+        <ul>
+          <li><span class="zh">正负数</span> <b>Negative Numbers:</b> adding and subtracting on a number line, then multiplying and dividing, then order of operations (BIDMAS) with negatives.</li>
+          <li><span class="zh">短除法</span> <b>Factors and Primes:</b> primes and HCF, then the Chinese short-division "ladder" for HCF and LCM, then prime factorisation in index form.</li>
+          <li><span class="zh">乘方</span> <b>Powers and Standard Form:</b> squares, cubes and roots, then the index laws, then standard form for very large and very small numbers.</li>
+          <li><span class="zh">比例</span> <b>Ratio and Percentages:</b> simplifying and sharing ratios, then percentage change with multipliers, then reverse percentages and compound interest.</li>
+          <li><span class="zh">方程</span> <b>Solving Equations:</b> two-step equations, unknowns on both sides, then brackets and negative answers. Each one is shown as a balance, and the worked steps appear after.</li>
+          <li><span class="zh">代数</span> <b>Expressions:</b> substitution and collecting like terms, expanding single brackets, then expanding double brackets and factorising quadratics.</li>
+          <li><span class="zh">数列</span> <b>Sequences:</b> term-to-term rules, then the <i class="v">n</i>th term, then using the <i class="v">n</i>th term and simple quadratic sequences.</li>
+          <li><span class="zh">勾股定理</span> <b>Angles, Area and Pythagoras:</b> angle facts, then areas of triangles, trapeziums and circles, then Pythagoras' theorem, known in China as the gōu gǔ theorem and recorded there over 2,000 years ago.</li>
+        </ul>
+        <p>Not covered yet: probability, statistics, graphs and transformations. Every question has a <b>Show the method</b> button that explains how to solve it, and it opens by itself after two wrong tries. Using it costs nothing. XP is saved on this device only: 10 XP for a first-try answer, 5 XP after a wrong one.</p>
+      </details>
+    </section>
+
+    <section class="screen" id="game" hidden>
+      <div class="game-head"><span class="seal" id="gSeal"></span><h2 id="gTitle"></h2><span class="streak" id="streak" hidden></span></div>
+      <div class="levels" role="group" aria-label="Year group"><span class="lv-label">Year</span><button class="lv" data-level="easy" aria-pressed="true">Year 7</button><button class="lv" data-level="medium" aria-pressed="false">Year 8</button><button class="lv" data-level="hard" aria-pressed="false">Year 9</button></div>
+      <div class="prompt">
+        <button class="say-btn" id="sayBtn" aria-label="Read the question aloud">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/><path d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg>
+        </button>
+        <p id="promptText" aria-live="polite"></p>
+      </div>
+      <div class="method" id="methodRow" hidden><button class="hint-btn" id="methodBtn" aria-expanded="false">Show the method</button><div class="method-box" id="methodBox" hidden></div></div>
+      <div class="stage" id="stage"></div>
+      <div class="answers" id="answers"></div>
+      <details class="grown"><summary>Method notes</summary><p id="gTip"></p></details>
+    </section>
+  </main>
+</div>
+
+<div class="cheer" id="cheer" hidden>
+  <div class="cheer-card" role="dialog" aria-labelledby="cheerTitle">
+    <span data-panda></span>
+    <h2 id="cheerTitle">Level up!</h2>
+    <p id="cheerText"></p>
+    <button id="cheerBtn">Keep going</button>
+  </div>
+</div>
+<div class="cheer" id="timesUp" hidden>
+  <div class="cheer-card" role="dialog" aria-labelledby="tuTitle">
+    <span data-panda></span>
+    <h2 id="tuTitle">Session over</h2>
+    <p id="tuText"></p>
+    <button id="tuDone">Done</button>
+    <button class="hold" id="tuMore"><span>Hold for 5 more minutes</span></button>
+  </div>
+</div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+/* Bao for KS3: glasses and headphones */
+const PANDA='<svg class="panda" viewBox="0 0 120 120" aria-hidden="true"><circle class="pk" cx="27" cy="28" r="17"/><circle class="pk" cx="93" cy="28" r="17"/><path d="M14 66a46 46 0 0192 0" fill="none" stroke="var(--coral)" stroke-width="7" stroke-linecap="round"/><circle class="pw" cx="60" cy="64" r="45" style="stroke:var(--ink);stroke-width:4"/><rect class="ph" x="6" y="56" width="14" height="26" rx="7"/><rect class="ph" x="100" y="56" width="14" height="26" rx="7"/><ellipse class="pk" cx="41" cy="60" rx="12" ry="15" transform="rotate(-22 41 60)"/><ellipse class="pk" cx="79" cy="60" rx="12" ry="15" transform="rotate(22 79 60)"/><circle class="pw" cx="43" cy="58" r="4.5"/><circle class="pw" cx="77" cy="58" r="4.5"/><rect class="pg" x="26" y="47" width="30" height="25" rx="8"/><rect class="pg" x="64" y="47" width="30" height="25" rx="8"/><path class="pg" d="M56 57h8"/><ellipse class="pk" cx="60" cy="80" rx="7" ry="5"/><path class="ps" d="M52 89q8 6 16 0"/></svg>';
+document.querySelectorAll('[data-panda]').forEach(el=>el.outerHTML=PANDA);
+
+/* ---------- state ---------- */
+let xp=0, streak=0, soundOn=true, level='easy', readAloud=false;
+try{xp=parseInt(localStorage.getItem('gpm-xp'),10)||0}catch(e){}
+try{soundOn=localStorage.getItem('gpm-sound')!=='off'}catch(e){}
+try{readAloud=localStorage.getItem('gpm-read')==='on'}catch(e){}
+try{const l=localStorage.getItem('gpm-level');if(['easy','medium','hard'].includes(l))level=l}catch(e){}
+const lvOf=x=>Math.floor(x/100)+1;
+function showXP(){
+  $('#xpCount').textContent=`${xp} XP`;$('#lvText').textContent=`Level ${lvOf(xp)}`;
+  const note=document.getElementById('starNote');if(note)note.textContent=xp?`${xp} XP so far (level ${lvOf(xp)}).`:'No XP yet.';
+  const rb=document.getElementById('resetBtn');if(rb)rb.disabled=!xp;
+}
+function showStreak(){const s=$('#streak');s.hidden=streak<2;s.textContent=`Streak ${streak}`}
+
+/* ---------- voice ---------- */
+/* Rank voices: British English first, then the higher-quality neural/enhanced voices, and never the novelty ones */
+let voice=null;
+function voiceScore(v){
+  const n=v.name.toLowerCase(),l=(v.lang||'').toLowerCase().replace('_','-');
+  if(!l.startsWith('en'))return -1;
+  if(/albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|good news|grandma|grandpa|hysterical|jester|junior|organ|ralph|fred|superstar|trinoids|whisper|wobble|zarvox/.test(n))return -1;
+  let s=l==='en-gb'?30:/^en-(au|ie|nz)/.test(l)?20:10;
+  if(/natural|neural|premium|enhanced/.test(n))s+=40;
+  if(/google uk english|sonia|libby|ryan|serena|daniel|kate|martha|stephanie|samantha|karen|moira|tessa|aria|jenny/.test(n))s+=20;
+  if(v.localService===false)s+=5;
+  return s;
+}
+function pickVoice(){
+  try{
+    let best=null,top=-1;
+    speechSynthesis.getVoices().forEach(v=>{const s=voiceScore(v);if(s>top){top=s;best=v}});
+    voice=best;
+  }catch(e){}
+}
+if('speechSynthesis' in window){pickVoice();try{speechSynthesis.onvoiceschanged=pickVoice}catch(e){}}
+/* iOS only lets speech start inside a tap, so unlock it with a silent utterance on the first touch */
+if('speechSynthesis' in window)document.addEventListener('pointerdown',()=>{try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u)}catch(e){}},{once:true});
+const speakable=t=>t.replace(/<[^>]+>/g,'').replace(/²/g,' squared').replace(/³/g,' cubed').replace(/×/g,' times ').replace(/÷/g,' divided by ').replace(/(^|[\s(])−(?=\d)/g,'$1negative ').replace(/−/g,' minus ').replace(/\+/g,' plus ').replace(/=/g,' equals ').replace(/%/g,' percent').replace(/\?/g,' what ').replace(/°/g,' degrees');
+let sayTimer=null;
+/* Speech only plays when "read aloud" is on, or when force is set (the speaker button) */
+function say(t,force){
+  if(!soundOn||!(readAloud||force)||!('speechSynthesis' in window))return;
+  try{
+    clearTimeout(sayTimer);
+    const busy=speechSynthesis.speaking||speechSynthesis.pending;
+    speechSynthesis.cancel();
+    /* Speaking straight after cancel() clips the first word in Chrome and Safari, so wait a moment */
+    sayTimer=setTimeout(()=>{
+      const u=new SpeechSynthesisUtterance(speakable(t));
+      if(voice){u.voice=voice;u.lang=voice.lang}else u.lang='en-GB';
+      u.rate=.95;u.pitch=1;
+      speechSynthesis.speak(u);
+    },busy?220:80);
+  }catch(e){}
+}
+
+/* ---------- sound effects ---------- */
+let ac=null;
+function tone(f,dur,type,when,vol){
+  if(!soundOn)return;
+  try{
+    ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+    if(ac.state==='suspended')ac.resume();
+    const t=ac.currentTime+(when||0),o=ac.createOscillator(),g=ac.createGain();
+    o.type=type||'triangle';o.frequency.setValueAtTime(f,t);
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol||.13,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    o.connect(g).connect(ac.destination);o.start(t);o.stop(t+dur+.05);
+  }catch(e){}
+}
+const sfx={
+  click:()=>tone(1100,.04,'square',0,.025),
+  step:i=>tone(523*Math.pow(1.122,i%8),.16),
+  yay:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.2,'triangle',i*.06)),
+  oops:()=>{tone(247,.18,'sine',0,.11);tone(196,.24,'sine',.1,.09)}
+};
+
+$('#soundBtn').onclick=()=>{
+  soundOn=!soundOn;
+  try{localStorage.setItem('gpm-sound',soundOn?'on':'off')}catch(e){}
+  $('#soundWaves').toggleAttribute('hidden',!soundOn);
+  $('#soundX').toggleAttribute('hidden',soundOn);
+  $('#soundBtn').setAttribute('aria-label',soundOn?'Turn sound off':'Turn sound on');
+  if(!soundOn){try{speechSynthesis.cancel()}catch(e){}}else sfx.click();
+};
+if(!soundOn){$('#soundWaves').setAttribute('hidden','');$('#soundX').removeAttribute('hidden');$('#soundBtn').setAttribute('aria-label','Turn sound on')}
+
+/* ---------- maths helpers ---------- */
+const rand=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const randNZ=(a,b)=>{let v;do{v=rand(a,b)}while(v===0);return v};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a),lcm=(a,b)=>a/gcd(a,b)*b;
+const isPrime=n=>{if(n<2)return false;for(let i=2;i*i<=n;i++)if(n%i===0)return false;return true};
+const N=n=>n<0?'−'+fmt(-n):fmt(n);
+const P=n=>n<0?`(${N(n)})`:N(n);
+const fmt=n=>Number(n).toLocaleString('en-GB',{maximumFractionDigits:4});
+const money=n=>'£'+n.toFixed(2);
+const V=s=>`<i class="v">${s}</i>`;
+const SUP={2:'²',3:'³'};
+/* Write a·v + b as text, e.g. lin(3,-5) = "3x − 5", lin(-1,4) = "−x + 4" */
+function terms(list){
+  let out='';
+  list.forEach(([c,v])=>{if(!c)return;const a=Math.abs(c),body=v?(a===1?'':fmt(a))+V(v.replace(/[²³]/,''))+(v.match(/[²³]/)||[''])[0]:fmt(a);
+    out+=out?(c<0?' − ':' + ')+body:(c<0?'−':'')+body});
+  return out||'0';
+}
+const lin=(a,b,v='x')=>terms([[a,v],[b,'']]);
+const quad=(a,b,c)=>terms([[a,'x²'],[b,'x'],[c,'']]);
+const plain=h=>h.replace(/<[^>]+>/g,'');
+/* Build answer options from [html, value] pairs, dropping any that read the same as an earlier one (the right answer comes first) */
+const uniq=pairs=>{const seen=new Set();return pairs.filter(([h])=>!seen.has(plain(h))&&seen.add(plain(h))).map(([h,v])=>({html:h,label:plain(h),value:v}))};
+/* Remember the last question per topic so the same one doesn't come straight back */
+const lastQ={};
+function fresh(key,fn){let v,g=0;do{v=fn()}while(v===lastQ[key]&&g++<12);lastQ[key]=v;return v}
+
+/* ---------- shared UI ---------- */
+const stage=$('#stage'),answers=$('#answers'),promptText=$('#promptText');
+let current=null,spoken='',timers=[],keyHandler=null,misses=0;
+function later(fn,ms){const t=setTimeout(fn,ms);timers.push(t);return t}
+function stopTimers(){timers.forEach(clearTimeout);timers=[]}
+function setPrompt(html,speech){promptText.innerHTML=html;spoken=speech||plain(html);say(spoken)}
+$('#sayBtn').onclick=()=>say(spoken,true);
+function clearAnswers(){answers.innerHTML='';answers.className='answers';answers.style.setProperty('--cols',1);keyHandler=null}
+document.addEventListener('keydown',e=>{if(keyHandler&&!game.hidden&&!e.metaKey&&!e.ctrlKey){const k=e.key==='Enter'?'ok':e.key==='Backspace'?'del':e.key==='-'?'neg':e.key;if(/^([0-9.]|ok|del|neg)$/.test(k)){e.preventDefault();keyHandler(k)}}});
+/* Every question has a method the student can open before answering; it opens by itself after two wrong tries */
+let methodHTML='';
+function setMethod(html){methodHTML=html;$('#methodRow').hidden=false;$('#methodBox').hidden=true;$('#methodBox').innerHTML=html;$('#methodBtn').hidden=false;$('#methodBtn').setAttribute('aria-expanded','false')}
+function openMethod(){if(!methodHTML)return;$('#methodBox').hidden=false;$('#methodBtn').hidden=true;$('#methodBtn').setAttribute('aria-expanded','true');say(plain(methodHTML))}
+$('#methodBtn').onclick=()=>{sfx.click();openMethod()};
+function miss(){misses++;streak=0;showStreak();sfx.oops();if(misses>=2)openMethod()}
+
+function askOpts(opts,right,onRight,onWrong){
+  clearAnswers();
+  const long=opts.some(o=>plain(o.html||o.label).length>16);
+  answers.className='answers'+(long?' list':'');
+  answers.style.setProperty('--cols',long?1:opts.length===4?2:Math.min(opts.length,3));
+  opts.forEach(o=>{
+    const b=document.createElement('button');b.className='opt';b.innerHTML=o.html||o.label;
+    b.onclick=()=>{
+      const v=o.value??o.label;
+      if(v===right){b.classList.add('right');[...answers.children].forEach(x=>x.disabled=true);win(onRight)}
+      else{b.classList.add('wrong');b.disabled=true;miss();const h=onWrong&&onWrong(o);if(h)showHint(h);say(h||'Not quite.')}
+    };
+    answers.appendChild(b);
+  });
+}
+/* Number pad: 4 columns so minus and the decimal point always have a place. Physical keyboards work too. */
+function makePad(onKey){
+  const pad=document.createElement('div');pad.className='pad';
+  [['7'],['8'],['9'],['del','⌫','del'],['4'],['5'],['6'],['neg','±','fn'],['1'],['2'],['3'],['.','.','fn'],['0','0','zero'],['ok','Check','ok']].forEach(([k,t,c])=>{
+    const b=document.createElement('button');b.className='key'+(c?' '+c:'');b.textContent=t||k;
+    b.setAttribute('aria-label',k==='ok'?'Check':k==='del'?'Delete':k==='neg'?'Make negative':k);b.dataset.k=k;
+    b.onclick=()=>{sfx.click();onKey(k)};pad.appendChild(b);
+  });
+  keyHandler=onKey;
+  return pad;
+}
+function askNumber({answer,unit,pre,tol=1e-9,onRight,onWrong}){
+  clearAnswers();
+  answers.insertAdjacentHTML('beforeend',`<div class="entry-row">${pre?`<span class="unit">${pre}</span>`:''}<div class="entry" id="entry" aria-live="polite"></div>${unit?`<span class="unit">${unit}</span>`:''}</div>`);
+  const entry=$('#entry');let val='',locked=false,tries=0;
+  const show=()=>{entry.textContent=val.replace('-','−')};
+  const pad=makePad(k=>{
+    if(locked)return;
+    if(k==='del')val=val.slice(0,-1);
+    else if(k==='neg')val=val.startsWith('-')?val.slice(1):'-'+val;
+    else if(k==='ok'){
+      if(!val||val==='-')return;
+      if(Math.abs(parseFloat(val)-answer)<=tol){locked=true;entry.classList.add('right');pad.querySelectorAll('.key').forEach(x=>x.disabled=true);keyHandler=null;win(onRight);return}
+      tries++;entry.classList.remove('wrong');void entry.offsetWidth;entry.classList.add('wrong');miss();
+      const h=onWrong&&onWrong(parseFloat(val),tries);if(h)showHint(h);say(h||'Not quite.');val='';
+    }
+    else if(val.replace('-','').length<9&&!(k==='.'&&val.includes('.')))val+=k;
+    show();
+  });
+  answers.appendChild(pad);
+}
+function win(after){
+  const gain=misses?5:10,before=lvOf(xp);
+  xp+=gain;if(!misses){streak++}misses=0;
+  try{localStorage.setItem('gpm-xp',xp)}catch(e){}
+  showXP();showStreak();sfx.yay();
+  const box=$('#xpBox');box.classList.remove('bump');void box.offsetWidth;box.classList.add('bump');
+  burst(streak>=5?60:30);
+  if(after)after();
+  later(showNext,900);
+  if(lvOf(xp)>before)setTimeout(showCheer,1700);
+}
+function showNext(){
+  clearAnswers();
+  const b=document.createElement('button');b.className='next';b.innerHTML='Next <span aria-hidden="true">&#10140;</span>';
+  b.onclick=()=>{b.disabled=true;sfx.click();play()};
+  answers.appendChild(b);
+  keyHandler=k=>{if(k==='ok')b.click()};
+}
+function showFact(f,cls){stage.insertAdjacentHTML('beforeend',`<div class="fact${cls?' '+cls:''}">${f}</div>`)}
+function showHint(h){const old=stage.querySelector('.hint');if(old)old.innerHTML=h;else stage.insertAdjacentHTML('beforeend',`<p class="hint">${h}</p>`)}
+function fillQ(v){const q=stage.querySelector('.sum .q');if(q){q.innerHTML=v;q.classList.add('ok')}}
+const sumHTML=s=>`<div class="sum">${s.replace('?','<span class="q">?</span>')}</div>`;
+const stepsHTML=xs=>`<ol class="steps">${xs.map(x=>`<li>${x}</li>`).join('')}</ol>`;
+
+/* ---------- diagrams ---------- */
+function numberLine(a,b){
+  const lo=-25,hi=25,x=v=>20+(v-lo)/(hi-lo)*320;
+  let t='';for(let v=lo;v<=hi;v+=5)t+=`<line x1="${x(v)}" y1="${v===0?32:38}" x2="${x(v)}" y2="${v===0?58:52}" stroke="var(--ink)" stroke-width="${v===0?3:2}"/><text x="${x(v)}" y="76" text-anchor="middle">${N(v)}</text>`;
+  const arrow=b===undefined?'':`<path d="M${x(a)} 30 Q ${(x(a)+x(b))/2} ${a===b?30:4} ${x(b)} 30" fill="none" stroke="var(--coral)" stroke-width="3" marker-end="url(#ah)"/><circle cx="${x(b)}" cy="45" r="7" fill="var(--teal)"/>`;
+  return `<svg class="nl" viewBox="0 0 360 84" role="img" aria-label="Number line"><defs><marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8z" fill="var(--coral)"/></marker></defs><line x1="14" y1="45" x2="346" y2="45" stroke="var(--ink)" stroke-width="3"/>${t}<circle cx="${x(a)}" cy="45" r="7" fill="var(--coral)"/>${arrow}</svg>`;
+}
+function balance(left,right){
+  return `<svg class="balance" viewBox="0 0 360 120" role="img" aria-label="Balance scales"><path d="M180 30V104M150 110h60" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/><path d="M40 30H320" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/><circle cx="180" cy="30" r="7" fill="var(--violet)"/>
+    <path d="M40 30L20 66M40 30L60 66M320 30L300 66M320 30L340 66" stroke="var(--ink-soft)" stroke-width="2"/><path d="M8 66h104a6 6 0 0 1-6 8H14a6 6 0 0 1-6-8z" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/><path d="M248 66h104a6 6 0 0 1-6 8H254a6 6 0 0 1-6-8z" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/>
+    <foreignObject x="0" y="78" width="120" height="40"><div xmlns="http://www.w3.org/1999/xhtml" style="text-align:center;font:600 16px var(--math)">${left}</div></foreignObject><foreignObject x="240" y="78" width="120" height="40"><div xmlns="http://www.w3.org/1999/xhtml" style="text-align:center;font:600 16px var(--math)">${right}</div></foreignObject></svg>`;
+}
+
+/* ---------- topics ---------- */
+const GAMES={
+  neg:{
+    title:'Negative Numbers',seal:'正负数',
+    tip:'Adding a negative is the same as subtracting; subtracting a negative is the same as adding. When multiplying or dividing, two signs the same give a positive answer and two different signs give a negative. BIDMAS: brackets, indices, division and multiplication, then addition and subtraction.',
+    levels:{easy:'Year 7: adding and subtracting negative numbers on a number line.',medium:'Year 8: multiplying and dividing negative numbers.',hard:'Year 9: order of operations (BIDMAS) with negatives and powers.'},
+    round(){
+      if(level==='easy'){
+        let a,b,op;fresh('neg',()=>{a=randNZ(-12,12);b=randNZ(-12,12);op=pick(['+','−']);return `${a}${op}${b}`});
+        if(a>0&&b>0)b=-b;
+        const ans=op==='+'?a+b:a-b,text=`${N(a)} ${op} ${P(b)} = ?`;
+        stage.innerHTML=sumHTML(text)+numberLine(a);
+        setPrompt(`Work out ${N(a)} ${op} ${P(b)}.`);setMethod(op==='−'&&b<0?`Subtracting a negative is the same as adding: ${N(a)} − ${P(b)} = ${N(a)} + ${-b}. Then count along the number line.`:op==='+'&&b<0?`Adding a negative is the same as subtracting: ${N(a)} + ${P(b)} = ${N(a)} − ${-b}. Then count along the number line.`:op==='+'?`Start at ${N(a)} on the number line and move ${b} to the right.`:`Start at ${N(a)} on the number line and move ${b} to the left.`);
+        const move=ans-a,f=`Start at ${N(a)}. ${op==='−'&&b<0?`Subtracting ${N(b)} is the same as adding ${-b}, so `:op==='+'&&b<0?`Adding ${N(b)} is the same as subtracting ${-b}, so `:''}move ${Math.abs(move)} ${move>=0?'right':'left'} to ${N(ans)}.`;
+        return askNumber({answer:ans,onRight:()=>{fillQ(N(ans));stage.querySelector('.nl').outerHTML=numberLine(a,ans);showFact(f)},
+          onWrong:()=>op==='−'&&b<0?'Subtracting a negative is the same as adding.':op==='+'&&b<0?'Adding a negative is the same as subtracting.':'Use the number line: which way do you move?'});
+      }
+      if(level==='medium'){
+        let a,b,div;fresh('neg',()=>{a=randNZ(-12,12);b=randNZ(-12,12);div=Math.random()<.4;if(a>0&&b>0)a=-a;return `${a}${b}${div}`});
+        const [x,y,ans,sym]=div?[a*b,b,a,'÷']:[a,b,a*b,'×'];
+        stage.innerHTML=sumHTML(`${N(x)} ${sym} ${P(y)} = ?`);
+        setPrompt(`Work out ${N(x)} ${sym} ${P(y)}.`);setMethod(`Ignore the signs and work out ${Math.abs(x)} ${sym} ${Math.abs(y)}. Then decide the sign: <b>same signs give a positive</b>, <b>different signs give a negative</b>.`);
+        const same=(x<0)===(y<0);
+        return askNumber({answer:ans,onRight:()=>{fillQ(N(ans));showFact(`${same?'Same signs':'Different signs'}, so the answer is ${same?'positive':'negative'}: ${N(x)} ${sym} ${P(y)} = ${N(ans)}.`)},
+          onWrong:v=>Math.abs(v)===Math.abs(ans)?'The number is right; check the sign. Same signs give a positive, different signs a negative.':`Work out ${Math.abs(x)} ${sym} ${Math.abs(y)} first, then decide the sign.`});
+      }
+      const T=[
+        ()=>{const a=randNZ(-6,-2),b=rand(2,6),c=randNZ(-5,-1);return[`(${N(a)})² − ${b} × ${P(c)}`,a*a-b*c,[`(${N(a)})² = ${a*a}`,`${b} × ${P(c)} = ${N(b*c)}`,`${a*a} − ${P(b*c)} = ${N(a*a-b*c)}`]]},
+        ()=>{const a=rand(-10,10),b=rand(2,6),c=randNZ(-6,-1);return[`${N(a)} − ${b} × ${P(c)}`,a-b*c,[`Multiply first: ${b} × ${P(c)} = ${N(b*c)}`,`${N(a)} − ${P(b*c)} = ${N(a-b*c)}`]]},
+        ()=>{const a=randNZ(-6,-2),b=randNZ(-6,6),c=rand(-10,10);return[`${P(a)} × ${P(b)} ${c<0?'−':'+'} ${fmt(Math.abs(c))}`,a*b+c,[`${P(a)} × ${P(b)} = ${N(a*b)}`,`${N(a*b)} ${c<0?'−':'+'} ${fmt(Math.abs(c))} = ${N(a*b+c)}`]]},
+        ()=>{const a=rand(-8,8),b=rand(2,9),c=randNZ(-4,-2);return[`(${N(a)} − ${b}) × ${P(c)}`,(a-b)*c,[`Brackets first: ${N(a)} − ${b} = ${N(a-b)}`,`${P(a-b)} × ${P(c)} = ${N((a-b)*c)}`]]},
+        ()=>{const b=randNZ(-4,-2),k=randNZ(-5,5),a=b*k*rand(1,2),c=rand(1,9);return[`${N(a)} ÷ ${P(b)} − ${c}`,a/b-c,[`Divide first: ${N(a)} ÷ ${P(b)} = ${N(a/b)}`,`${N(a/b)} − ${c} = ${N(a/b-c)}`]]}
+      ];
+      let q;fresh('neg',()=>{q=pick(T)();return q[0]});
+      stage.innerHTML=sumHTML(`${q[0]} = ?`);
+      setPrompt(`Work out ${q[0]}. Remember BIDMAS.`);setMethod('<b>BIDMAS</b>: Brackets, then Indices (powers), then Division and Multiplication from left to right, then Addition and Subtraction. A negative number squared is positive: (−3)² = 9.');
+      askNumber({answer:q[1],onRight:()=>{fillQ(N(q[1]));showFact(stepsHTML(q[2]))},onWrong:(v,t)=>t>=2?q[2][0]+'.':'Do brackets and powers first, then × and ÷, then + and −.'});
+    }
+  },
+  factors:{
+    title:'Factors and Primes',seal:'短除法',
+    tip:'A prime has exactly two factors: 1 and itself. The short-division ladder (短除法) used in Chinese classrooms divides both numbers by a shared prime, again and again, until they share nothing. The HCF is the product of the primes down the side; the LCM is those primes times the two numbers left at the bottom.',
+    levels:{easy:'Year 7: spotting primes and finding the HCF of two numbers.',medium:'Year 8: the ladder method for HCF and LCM.',hard:'Year 9: prime factorisation in index form, and LCM with the ladder.'},
+    round(){
+      if(level==='easy'){
+        if(Math.random()<.6){
+          let n;fresh('fac',()=>{n=Math.random()<.45?pick([2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97]):pick([21,27,33,39,49,51,57,63,69,77,81,87,91,93,95,99]);return n});
+          const p=isPrime(n);let d=2;while(!p&&n%d)d++;
+          stage.innerHTML=`<div class="sum">${n}</div>`;
+          setPrompt(`Is ${n} a prime number?`);setMethod('A prime has <b>exactly two factors</b>: 1 and itself. To test a number under 100, try dividing by 2, 3, 5 and 7. If none of them go in exactly, it is prime.');
+          return askOpts([{label:'Prime',value:true},{label:'Not prime',value:false}],p,()=>showFact(p?`${n} is prime: its only factors are 1 and ${n}.`:`${n} is not prime: ${n} = ${d} × ${n/d}.`),()=>p?`Try dividing ${n} by 2, 3, 5 and 7.`:`Does ${n} divide by 3 or 7?`);
+        }
+        let a,b,g;fresh('fac',()=>{g=pick([2,3,4,5,6,8]);a=g*rand(2,6);b=g*rand(2,7);return `${a},${b}`});
+        if(a===b)b+=g;const h=gcd(a,b);
+        stage.innerHTML=`<div class="sum">HCF of ${a} and ${b}</div>`;
+        setPrompt(`What is the highest common factor of ${a} and ${b}?`);setMethod('List the factor pairs of each number. The <b>highest common factor</b> is the biggest number that appears in both lists.');
+        return askNumber({answer:h,onRight:()=>showFact(`The biggest number that divides both is ${h}: ${a} = ${h} × ${a/h} and ${b} = ${h} × ${b/h}.`),onWrong:()=>'List the factors of the smaller number, then find the largest that also divides the other.'});
+      }
+      if(level==='hard'&&Math.random()<.5){
+        const Ns=[72,90,120,126,168,180,196,200,252,300,360,392,450,504];
+        let n;fresh('fac',()=>{n=pick(Ns);return n});
+        const f={};let m=n;for(let p=2;m>1;p++)while(m%p===0){f[p]=(f[p]||0)+1;m/=p}
+        const show=fs=>Object.keys(fs).sort((x,y)=>x-y).map(p=>p+(fs[p]>1?`<sup>${fs[p]}</sup>`:'')).join(' × ');
+        const ks=Object.keys(f),w1={...f},w2={...f};
+        const k0=ks[0],k1=ks[ks.length-1];
+        w1[k0]=f[k0]+1;if(w1[k0]===f[k0])w1[k0]++;
+        if(ks.length>1){w2[k0]=f[k1];w2[k1]=f[k0];if(f[k0]===f[k1])w2[k1]=f[k1]+1}else w2[k0]=f[k0]-1||2;
+        const opts=shuffle([f,w1,w2].map((x,i)=>({label:plain(show(x)),html:show(x),value:i===0?'r':'w'+i})));
+        stage.innerHTML=`<div class="sum">${n} = ?</div>`;
+        setPrompt(`Write ${n} as a product of prime factors.`);setMethod('Divide by 2 as many times as you can, then by 3, then 5, then 7 (a factor tree works too). Count how many times each prime appears and write that count as a <b>power</b>, e.g. 2 × 2 × 2 = 2³.');
+        return askOpts(opts,'r',()=>showFact(`${n} = ${show(f)}. Check: multiply it back out and you get ${n}.`),()=>'Divide by 2 as many times as you can, then 3, then 5.');
+      }
+      let a,b;fresh('fac',()=>{const g=pick([4,6,8,9,10,12,15,18]);a=g*pick([2,3,4,5]);b=g*pick([3,5,7]);return `${a},${b}`});
+      if(a===b)b+=gcd(a,b);
+      const askL=level==='hard'||Math.random()<.5;
+      let x=a,y=b;const rows=[],primes=[];
+      stage.innerHTML=`<div class="ladder" id="ladder"><div class="lrow"><span class="ld"></span><span class="ln">${a}</span><span class="ln">${b}</span></div></div><p class="hint" style="background:var(--page)">Tap a prime that divides both numbers.</p>`;
+      setPrompt(`Use the ladder to find the ${askL?'lowest common multiple':'highest common factor'} of ${a} and ${b}.`);setMethod(`<b>Short division ladder</b>: write both numbers side by side. Divide both by a prime that goes into both, and write the answers underneath. Repeat until no prime divides both.<br><b>HCF</b> = multiply the primes down the side. <b>LCM</b> = the primes down the side × the numbers on the bottom row.`);
+      const lad=$('#ladder'),last=()=>lad.lastElementChild;
+      const finish=()=>{
+        last().classList.add('end');stage.querySelector('.hint')?.remove();
+        const H=primes.reduce((s,p)=>s*p,1),L=H*x*y;
+        setPrompt(`${x} and ${y} share no more primes. Now find the ${askL?'LCM':'HCF'} of ${a} and ${b}.`);
+        askNumber({answer:askL?L:H,onRight:()=>showFact(askL?`LCM = ${primes.join(' × ')} × ${x} × ${y} = ${fmt(L)} (the side, times the bottom row).`:`HCF = ${primes.join(' × ')} = ${H} (multiply the primes down the side).`),
+          onWrong:()=>askL?'Multiply the primes down the side by both numbers on the bottom row.':'Multiply the primes down the side.'});
+      };
+      const ladderButtons=()=>{
+        clearAnswers();answers.style.setProperty('--cols',4);
+        [2,3,5,7].forEach(p=>{const bt=document.createElement('button');bt.className='opt';bt.textContent=p;
+          bt.onclick=()=>{
+            if(x%p===0&&y%p===0){
+              last().classList.add('div');last().firstElementChild.textContent=p;primes.push(p);x/=p;y/=p;sfx.step(primes.length);
+              lad.insertAdjacentHTML('beforeend',`<div class="lrow"><span class="ld"></span><span class="ln">${x}</span><span class="ln">${y}</span></div>`);
+              if(gcd(x,y)===1)finish();
+            }else{bt.classList.remove('wrong');void bt.offsetWidth;bt.classList.add('wrong');setTimeout(()=>bt.classList.remove('wrong'),400);miss();const h=`${p} doesn't divide ${x%p?x:y} exactly.`;showHint(h);say(h)}
+          };answers.appendChild(bt)});
+      };
+      ladderButtons();
+    }
+  },
+  powers:{
+    title:'Powers and Standard Form',seal:'乘方',
+    tip:'Index laws: when multiplying powers of the same number, add the indices; when dividing, subtract them; for a power of a power, multiply them. Standard form writes a number as A × 10ⁿ where A is at least 1 and less than 10.',
+    levels:{easy:'Year 7: squares, cubes and square roots.',medium:'Year 8: the index laws.',hard:'Year 9: standard form for large and small numbers.'},
+    round(){
+      if(level==='easy'){
+        const T=[()=>{const n=rand(2,15);return[`${n}² = ?`,n*n,`${n} × ${n} = ${n*n}`]},()=>{const n=rand(2,6);return[`${n}³ = ?`,n**3,`${n} × ${n} × ${n} = ${n**3}`]},()=>{const n=rand(2,15);return[`√${n*n} = ?`,n,`${n} × ${n} = ${n*n}, so √${n*n} = ${n}`]},()=>{const n=rand(2,5);return[`∛${n**3} = ?`,n,`${n} × ${n} × ${n} = ${n**3}, so ∛${n**3} = ${n}`]}];
+        let q;fresh('pow',()=>{q=pick(T)();return q[0]});
+        stage.innerHTML=sumHTML(q[0]);setPrompt(`Work out ${q[0].replace(' = ?','')}.`);setMethod(q[0].includes('√')?'A square root asks: which number times itself makes this? Check with your square numbers.':q[0].includes('∛')?'A cube root asks: which number times itself, then times itself again, makes this?':q[0].includes('³')?'Cubed means three lots multiplied together: n × n × n.':'Squared means the number times itself: n × n.');
+        return askNumber({answer:q[1],onRight:()=>{fillQ(q[1]);showFact(q[2])},onWrong:()=>q[0].includes('²')?'Squared means multiply the number by itself.':q[0].includes('³')?'Cubed means three lots multiplied: n × n × n.':'Which number times itself makes this?'});
+      }
+      if(level==='medium'){
+        const base=pick(['2','3','5','7',V('a'),V('x'),V('y')]);
+        const T=[()=>{const m=rand(2,9),n=rand(2,9);return[`${base}<sup>${m}</sup> × ${base}<sup>${n}</sup>`,m+n,`Multiplying: add the indices, ${m} + ${n} = ${m+n}`]},
+          ()=>{const n=rand(2,8),m=n+rand(1,8);return[`${base}<sup>${m}</sup> ÷ ${base}<sup>${n}</sup>`,m-n,`Dividing: subtract the indices, ${m} − ${n} = ${m-n}`]},
+          ()=>{const m=rand(2,6),n=rand(2,5);return[`(${base}<sup>${m}</sup>)<sup>${n}</sup>`,m*n,`Power of a power: multiply the indices, ${m} × ${n} = ${m*n}`]}];
+        let q;fresh('pow',()=>{q=pick(T)();return q[0]});
+        stage.innerHTML=`<div class="sum">${q[0]} = ${base}<sup><span class="q" style="font-size:1em">?</span></sup></div>`;
+        setPrompt(`Simplify ${q[0]}. What is the new index?`,`Simplify. What is the new power?`);setMethod('<b>Index laws</b> (same base only): multiplying → <b>add</b> the powers; dividing → <b>subtract</b> the powers; a power of a power → <b>multiply</b> the powers.');
+        return askNumber({answer:q[1],onRight:()=>{const s=stage.querySelector('.q');s.textContent=q[1];s.classList.add('ok');showFact(q[2])},onWrong:()=>q[2].split(':')[0]+': what do you do with the indices?'});
+      }
+      const big=Math.random()<.55,toSF=Math.random()<.5;
+      let A,e;fresh('pow',()=>{A=rand(11,99)/10;if(A%1===0)A+=.3;e=big?rand(3,8):-rand(2,6);return `${A}${e}`});
+      A=+A.toFixed(1);const val=A*10**e,ord=e>0?fmt(Math.round(val)):val.toFixed(-e+1).replace(/0+$/,'');
+      const sf=(a,k)=>`${a} × 10<sup>${N(k)}</sup>`;
+      if(toSF){
+        stage.innerHTML=`<div class="sum">${ord}</div>`;setPrompt(`Write ${ord} in standard form.`);setMethod('Standard form is <b>A × 10ⁿ</b> where A is at least 1 and less than 10. Put the decimal point after the first non-zero digit, then count how many places it moved: big numbers get a positive n, small numbers a negative n.');
+        const opts=shuffle([[A,e,'r'],[+(A*10).toFixed(0),e-1,'w1'],[A,e>0?e-1:e+1,'w2'],[A,-e,'w3']].slice(0,4).map(([a,k,v])=>({label:plain(sf(a,k)),html:sf(a,k),value:v})));
+        return askOpts(opts,'r',()=>showFact(`The first number must be between 1 and 10, so it's ${A}. The decimal point moves ${Math.abs(e)} places, so the power is ${N(e)}.`),o=>o.value==='w1'?'The first number must be at least 1 and less than 10.':o.value==='w3'?(e>0?'Big numbers have a positive power of 10.':'Small numbers have a negative power of 10.'):'Count how many places the decimal point moves.');
+      }
+      stage.innerHTML=`<div class="sum">${sf(A,e)}</div>`;setPrompt(`Write ${plain(sf(A,e)).replace(/10(−?\d)/,'10^$1')} as an ordinary number.`,'Write this number as an ordinary number.');setMethod('With 10 to a <b>positive</b> power, move the decimal point that many places to the <b>right</b> (fill gaps with zeros). With a <b>negative</b> power, move it that many places to the <b>left</b>.');
+      const wr=e>0?[fmt(Math.round(val/10)),fmt(Math.round(val*10))]:[(val*10).toFixed(-e).replace(/0+$/,''),(val/10).toFixed(-e+2).replace(/0+$/,'')];
+      askOpts(shuffle([ord,...wr].map(v=>({label:v}))),ord,()=>showFact(`Move the decimal point ${Math.abs(e)} places ${e>0?'right':'left'}: ${ord}.`),()=>`The power is ${N(e)}, so move the decimal point ${Math.abs(e)} places ${e>0?'right':'left'}.`);
+    }
+  },
+  ratio:{
+    title:'Ratio and Percentages',seal:'比例',
+    tip:'Simplify a ratio by dividing both parts by their HCF. A multiplier turns a percentage change into one step: increase by 15% means × 1.15, decrease by 15% means × 0.85. For a reverse percentage, divide by the multiplier.',
+    levels:{easy:'Year 7: simplifying ratios and sharing in a ratio.',medium:'Year 8: percentage increase and decrease with multipliers.',hard:'Year 9: reverse percentages, percentage change and compound interest.'},
+    round(){
+      if(level==='easy'){
+        if(Math.random()<.5){
+          let a,b,k;fresh('rat',()=>{const [p,q]=pick([[2,3],[3,4],[1,4],[2,5],[3,5],[4,7],[5,6]]);k=rand(2,9);a=p*k;b=q*k;return `${a}:${b}`});
+          const g=gcd(a,b),r=`${a/g} : ${b/g}`,w=[`${a/2} : ${b/2}`,`${b/g} : ${a/g}`,`${a/g+1} : ${b/g+1}`].filter(x=>x!==r&&!x.includes('.'));
+          stage.innerHTML=`<div class="sum">${a} : ${b}</div>`;setPrompt(`Simplify the ratio ${a} : ${b} fully.`);setMethod('Find the <b>HCF</b> of the two parts, then divide both parts by it. A ratio is fully simplified when the parts share no common factor.');
+          return askOpts(shuffle([r,...[...new Set(w)].slice(0,2)]).map(v=>({label:v})),r,()=>showFact(`The HCF of ${a} and ${b} is ${g}. Divide both parts by ${g}: ${r}.`),o=>o.label.includes('.')?null:'Keep dividing until the parts share no factor.');
+        }
+        const [p,q]=pick([[2,3],[1,4],[3,5],[2,7],[4,5]]),u=rand(4,30),t=u*(p+q),[A,B]=pick([['Ava','Kai'],['Noah','Isla'],['Zain','Maya'],['Leo','Ruby']]);
+        stage.innerHTML=`<div class="word">${A} and ${B} share £${t} in the ratio ${p} : ${q}. How much does ${B} get?</div>`;
+        setPrompt(`${A} and ${B} share £${t} in the ratio ${p} : ${q}. How much does ${B} get?`);setMethod('1. Add the parts of the ratio to find the total number of parts. 2. Divide the amount by that to find one part. 3. Multiply by the number of parts you need.');
+        return askNumber({answer:u*q,pre:'£',onRight:()=>showFact(`${p} + ${q} = ${p+q} parts. £${t} ÷ ${p+q} = £${u} per part. ${B} gets ${q} × £${u} = £${u*q}.`),onWrong:()=>`First add the parts: ${p} + ${q} = ${p+q}.`});
+      }
+      if(level==='medium'){
+        if(Math.random()<.4){
+          const p=pick([5,12,15,20,25,30,35,40,8,3]),up=Math.random()<.5,m=up?1+p/100:1-p/100;
+          const r=+m.toFixed(2),w=[up?+(1-p/100).toFixed(2):+(1+p/100).toFixed(2),+(p/100).toFixed(2),+(1+p/10).toFixed(2)];
+          stage.innerHTML=`<div class="sum">${up?'+':'−'}${p}%</div>`;setPrompt(`What is the multiplier for a ${p}% ${up?'increase':'decrease'}?`);setMethod('Start from 100%. For an increase add the percentage, for a decrease take it away. Then divide by 100 to get the multiplier, e.g. a 15% increase is 115% = 1.15.');
+          return askOpts(shuffle([...new Set([r,...w])].slice(0,3)).map(v=>({label:String(v),value:v})),r,()=>showFact(`100% ${up?'+':'−'} ${p}% = ${100+(up?p:-p)}%, which is ${r} as a decimal.`),()=>`Start from 100% and ${up?'add':'take away'} ${p}%.`);
+        }
+        const p=pick([5,10,12,15,20,25,30,40,60,75]),up=Math.random()<.5,amt=pick([40,60,80,120,150,240,360,450,500]),m=up?1+p/100:1-p/100,ans=+(amt*m).toFixed(2);
+        stage.innerHTML=`<div class="sum">${up?'Increase':'Decrease'} £${amt} by ${p}%</div>`;setPrompt(`${up?'Increase':'Decrease'} £${amt} by ${p}%.`);setMethod('Find the multiplier first (increase: 1 + p ÷ 100; decrease: 1 − p ÷ 100), then multiply the amount by it in one step.');
+        return askNumber({answer:ans,pre:'£',tol:.005,onRight:()=>showFact(`Multiplier ${+m.toFixed(2)}: £${amt} × ${+m.toFixed(2)} = £${ans.toFixed(2).replace(/\.00$/,'')}.`),onWrong:()=>`Use the multiplier ${+m.toFixed(2)}.`});
+      }
+      const kind=pick(['reverse','change','compound']);
+      if(kind==='reverse'){
+        const p=pick([10,20,25,50,15]),up=Math.random()<.6,orig=pick([40,60,80,120,200,240,400]),now=+(orig*(up?1+p/100:1-p/100)).toFixed(2),m=+(up?1+p/100:1-p/100).toFixed(2);
+        stage.innerHTML=`<div class="word">After a ${p}% ${up?'increase':'decrease'}, a price is £${fmt(now)}. What was the original price?</div>`;
+        setPrompt(`After a ${p}% ${up?'increase':'decrease'}, a price is £${fmt(now)}. What was the original price?`);setMethod('The new price is (100 ± p)% of the original. Write that as a multiplier, then <b>divide</b> the new price by it. Don\'t just take p% of the new price: that uses the wrong starting amount.');
+        return askNumber({answer:orig,pre:'£',tol:.005,onRight:()=>showFact(`The new price is ${100+(up?p:-p)}% of the original, so divide by ${m}: £${fmt(now)} ÷ ${m} = £${orig}.`),onWrong:v=>Math.abs(v-now*(up?1-p/100:1+p/100))<.01?`Careful: ${p}% of the new price isn't ${p}% of the original. Divide by the multiplier ${m}.`:`Divide by the multiplier ${m}.`});
+      }
+      if(kind==='change'){
+        const a=pick([20,25,40,50,80,120,200,250]),p=pick([5,10,15,20,25,30,40,60]),up=Math.random()<.6,b=a*(up?1+p/100:1-p/100);
+        stage.innerHTML=`<div class="word">A price changes from £${a} to £${fmt(b)}. What is the percentage ${up?'increase':'decrease'}?</div>`;
+        setPrompt(`A price changes from £${a} to £${fmt(b)}. What is the percentage ${up?'increase':'decrease'}?`);setMethod('<b>Percentage change</b> = change ÷ original amount × 100. Always divide by the original amount, not the new one.');
+        return askNumber({answer:p,unit:'%',tol:.01,onRight:()=>showFact(`Change ÷ original × 100: ${fmt(Math.abs(b-a))} ÷ ${a} × 100 = ${p}%.`),onWrong:()=>'Divide the change by the original amount, then multiply by 100.'});
+      }
+      const P0=pick([200,500,800,1000,1500]),r=pick([2,3,4,5]),y=pick([2,3]),ans=+(P0*(1+r/100)**y).toFixed(2);
+      stage.innerHTML=`<div class="word">£${fmt(P0)} is saved at ${r}% compound interest per year. How much is there after ${y} years?</div>`;
+      setPrompt(`£${fmt(P0)} is saved at ${r}% compound interest per year. How much is there after ${y} years? Give your answer to the nearest penny.`);setMethod('Compound interest adds interest to the interest. Multiply by (1 + rate ÷ 100) once for every year: amount × multiplier<sup>years</sup>. Round to 2 decimal places at the end.');
+      askNumber({answer:ans,pre:'£',tol:.006,onRight:()=>showFact(`£${fmt(P0)} × ${1+r/100}<sup>${y}</sup> = £${ans.toFixed(2)}.`),onWrong:v=>Math.abs(v-(P0+P0*r/100*y))<.01?`That's simple interest. Compound interest grows each year: × ${1+r/100} each year.`:`Multiply by ${1+r/100} once for each year.`});
+    }
+  },
+  equations:{
+    title:'Solving Equations',seal:'方程',
+    tip:'An equation is a balance: whatever you do to one side, do to the other. Undo the operations in reverse order. With unknowns on both sides, first take the smaller x term away from both sides. Expand any brackets first.',
+    levels:{easy:'Year 7: two-step equations like 3x + 5 = 20.',medium:'Year 8: unknowns on both sides.',hard:'Year 9: brackets, fractions and negative answers.'},
+    round(){
+      let L,R,x,steps;
+      if(level==='easy'){
+        let a,b;fresh('eq',()=>{a=rand(2,9);x=rand(1,12);b=randNZ(-20,20);return `${a},${x},${b}`});
+        const c=a*x+b;L=lin(a,b);R=N(c);
+        steps=[`${b>0?'Subtract':'Add'} ${Math.abs(b)} ${b>0?'from':'to'} both sides: ${a}${V('x')} = ${N(c-b)}`,`Divide both sides by ${a}: ${V('x')} = ${x}`];
+      }else if(level==='medium'){
+        let a,b,c,d;fresh('eq',()=>{c=rand(1,6);a=c+rand(1,5);x=rand(-4,10);b=rand(-15,15);d=a*x+b-c*x;return `${a},${b},${c},${d}`});
+        L=lin(a,b);R=lin(c,d);
+        steps=[`Subtract ${c===1?'':c}${V('x')} from both sides: ${lin(a-c,b)} = ${N(d)}`,`${b>=0?'Subtract':'Add'} ${Math.abs(b)}: ${a-c===1?'':a-c}${V('x')} = ${N(d-b)}`,`Divide by ${a-c}: ${V('x')} = ${N(x)}`];
+        if(a-c===1)steps.pop();
+      }else{
+        if(Math.random()<.65){
+          let a,b,c,d;fresh('eq',()=>{a=rand(2,5);b=randNZ(-6,6);c=rand(1,a+3);if(c===a)c++;x=randNZ(-6,8);d=a*(x+b)-c*x;return `${a},${b},${c},${d}`});
+          L=`${a}(${lin(1,b)})`;R=lin(c,d);
+          const k=a-c;
+          steps=[`Expand the bracket: ${lin(a,a*b)} = ${lin(c,d)}`,k>0?`Subtract ${c===1?'':c}${V('x')} from both sides: ${lin(k,a*b)} = ${N(d)}`:`Subtract ${a}${V('x')} from both sides: ${N(a*b)} = ${lin(-k,d)}`,
+            k>0?`${a*b>=0?'Subtract':'Add'} ${Math.abs(a*b)}${k>1?`, then divide by ${k}`:''}: ${V('x')} = ${N(x)}`:`${d>=0?'Subtract':'Add'} ${Math.abs(d)}${-k>1?`, then divide by ${-k}`:''}: ${V('x')} = ${N(x)}`];
+        }else{
+          let a,b,c;fresh('eq',()=>{a=rand(2,5);c=randNZ(-6,9);b=randNZ(-9,9);x=a*c-b;return `${a},${b},${c}`});
+          L=`<span style="display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle"><span style="border-bottom:2px solid currentColor;padding:0 4px">${lin(1,b)}</span><span>${a}</span></span>`;R=N(c);
+          steps=[`Multiply both sides by ${a}: ${lin(1,b)} = ${N(a*c)}`,`${b>=0?'Subtract':'Add'} ${Math.abs(b)}: ${V('x')} = ${N(x)}`];
+        }
+      }
+      stage.innerHTML=`<div class="sum">${L} = ${R}</div>`+balance(L,R);
+      setPrompt(`Solve for ${V('x')}.`,`Solve ${plain(L)} equals ${plain(R)}.`);setMethod(level==='easy'?'An equation is a <b>balance</b>. Undo the operations in reverse order: first undo the + or −, then undo the ×. Do the same to both sides each time.':level==='medium'?'Get the x terms on one side: <b>subtract the smaller x term</b> from both sides. Then it is a two-step equation: undo the + or −, then divide.':plain(L).includes('(')?'<b>Expand the bracket</b> first. Then collect the x terms on one side and the numbers on the other, and divide.':'Clear the fraction first: <b>multiply both sides</b> by the number on the bottom. Then undo the + or −.');
+      askNumber({answer:x,pre:V('x')+' =',onRight:()=>showFact(stepsHTML(steps)),onWrong:(v,t)=>t>=2?steps[0]+'.':'Do the same thing to both sides. What can you undo first?'});
+    }
+  },
+  algebra:{
+    title:'Expressions',seal:'代数',
+    tip:'Like terms have exactly the same letters and powers, so 3x and 5x combine but 3x and 5x² don\'t. To expand a bracket, multiply every term inside by the term outside. For double brackets, multiply each term in the first bracket by each term in the second. Factorising is expanding in reverse.',
+    levels:{easy:'Year 7: substitution and collecting like terms.',medium:'Year 8: expanding single brackets and simplifying.',hard:'Year 9: expanding double brackets and factorising quadratics.'},
+    round(){
+      if(level==='easy'){
+        if(Math.random()<.5){
+          const a=rand(2,6),b=randNZ(-5,5),p=rand(2,6),q=randNZ(-4,6),ans=p*a-q*b+0;
+          const e2=terms([[p,'a'],[-q,'b']]);
+          stage.innerHTML=`<div class="sum">${e2}</div><p class="hint" style="background:var(--page)">when ${V('a')} = ${a} and ${V('b')} = ${N(b)}</p>`;
+          setPrompt(`Find the value of ${e2} when ${V('a')} = ${a} and ${V('b')} = ${N(b)}.`);setMethod('Replace each letter with its number, putting <b>brackets around negatives</b>. Then follow BIDMAS: multiply before you add or subtract.');
+          return askNumber({answer:p*a-q*b,onRight:()=>showFact(`${p} × ${a} ${-q<0?'−':'+'} ${Math.abs(q)} × ${P(b)} = ${N(p*a)} ${-q*b<0?'−':'+'} ${fmt(Math.abs(q*b))} = ${N(p*a-q*b)}`),onWrong:()=>`Swap each letter for its number, using brackets for ${N(b)}.`});
+        }
+        let a,b,c,d;fresh('alg',()=>{a=rand(2,7);b=randNZ(-6,6);c=randNZ(-5,5);d=randNZ(-6,6);if(a+c===0)c++;return `${a}${b}${c}${d}`});
+        const q=`${terms([[a,'x'],[b,'y']])} ${c<0?'−':'+'} ${terms([[Math.abs(c),'x'],[c<0?-d:d,'y']])}`;
+        const r=terms([[a+c,'x'],[b+d,'y']]),w1=terms([[a-c,'x'],[b-d,'y']]),w2=terms([[a+c,'x'],[b-d,'y']]),w3=terms([[a+c+b+d,'xy']]);
+        stage.innerHTML=`<div class="sum">${q}</div>`;setPrompt(`Simplify ${q} by collecting like terms.`);setMethod('<b>Like terms</b> have exactly the same letter. Collect the x terms together and the y terms together. The sign in front of a term belongs to it, so −2y means take away 2y.');
+        return askOpts(shuffle(uniq([[r,'r'],[w1,'w1'],[w2,'w2'],[w3,'w3']])).slice(0,4),'r',()=>showFact(`${V('x')} terms: ${N(a)} ${c<0?'−':'+'} ${Math.abs(c)} = ${N(a+c)}. ${V('y')} terms: ${N(b)} ${(c<0?-d:d)<0?'−':'+'} ${Math.abs(d)} = ${N(b+d)}. So ${r}.`),o=>o.value==='w3'?'x terms and y terms are not like terms, so they stay separate.':'Watch the sign in front of each term: it belongs to that term.');
+      }
+      if(level==='medium'){
+        if(Math.random()<.5){
+          let k,a,b;fresh('alg',()=>{k=randNZ(-6,7);if(k===1)k=2;a=rand(1,5);b=randNZ(-9,9);return `${k}${a}${b}`});
+          const q=`${k===-1?'−':N(k)}(${lin(a,b)})`,r=lin(k*a,k*b),w1=lin(k*a,b),w2=lin(k*a,-k*b),w3=lin(k+a,k+b);
+          stage.innerHTML=`<div class="sum">${q}</div>`;setPrompt(`Expand ${q}.`);setMethod('Multiply the number outside by <b>every term</b> inside the bracket. A negative outside flips the sign of each term inside.');
+          return askOpts(shuffle(uniq([[r,'r'],[w1,'w1'],[w2,'w2'],[w3,'w3']])),'r',()=>showFact(`Multiply both terms by ${N(k)}: ${N(k)} × ${lin(a,0)} = ${lin(k*a,0)} and ${N(k)} × ${P(b)} = ${N(k*b)}.`),o=>o.value==='w1'?'Multiply every term inside the bracket, not just the first.':k<0?'A negative outside changes the sign of every term inside.':null);
+        }
+        let p,a,b,q,c,d;fresh('alg',()=>{p=rand(2,5);a=1;b=randNZ(-6,6);q=randNZ(-4,5);c=1;d=randNZ(-6,6);if(q===1)q=3;return `${p}${b}${q}${d}`});
+        const ex=`${p}(${lin(1,b)}) ${q<0?'−':'+'} ${Math.abs(q)}(${lin(1,q<0?-d:d)})`;
+        const dd=q<0?-d:d,r=lin(p+q,p*b+q*dd),w1=lin(p+q,p*b+dd),w2=lin(p-q,p*b-q*dd);
+        stage.innerHTML=`<div class="sum">${ex}</div>`;setPrompt(`Expand and simplify ${ex}.`);setMethod('Expand each bracket separately (watch the sign in front of the second one), then collect the x terms and the numbers.');
+        return askOpts(shuffle(uniq([[r,'r'],[w1,'w1'],[w2,'w2']])),'r',()=>showFact(`Expand: ${lin(p,p*b)} ${q<0?'−':'+'} (${lin(Math.abs(q),Math.abs(q)*dd)}). Collect like terms: ${r}`),()=>'Expand each bracket fully first, then collect the x terms and the numbers.');
+      }
+      let a,b;fresh('alg',()=>{a=randNZ(-7,8);b=randNZ(-7,8);return `${Math.min(a,b)},${Math.max(a,b)}`});
+      const B=lin(1,a),C=lin(1,b),q=quad(1,a+b,a*b);
+      if(Math.random()<.5){
+        const w1=quad(1,0,a*b),w2=quad(1,a+b,-a*b),w3=quad(1,a*b,a+b);
+        stage.innerHTML=`<div class="sum">(${B})(${C})</div>`;setPrompt(`Expand (${B})(${C}).`);setMethod('Multiply <b>each term in the first bracket by each term in the second</b> (FOIL: First, Outer, Inner, Last, or use a grid). You get four terms; the two middle ones combine into one x term.');
+        return askOpts(shuffle(uniq([[q,'r'],[w1,'w1'],[w2,'w2'],[w3,'w3']])),'r',()=>showFact(`${V('x')} × ${V('x')} = ${V('x')}², ${V('x')} × ${P(b)} + ${P(a)} × ${V('x')} = ${lin(a+b,0)}, ${P(a)} × ${P(b)} = ${N(a*b)}. So ${q}.`),o=>o.value==='w1'?'You need all four products: the two middle ones make an x term.':'Multiply each term in the first bracket by each term in the second.');
+      }
+      const r=`(${B})(${C})`,w1=`(${lin(1,-a)})(${lin(1,-b)})`,w2=`(${lin(1,a*b)})(${lin(1,1)})`,w3=`(${lin(1,a)})(${lin(1,-b)})`;
+      stage.innerHTML=`<div class="sum">${q}</div>`;setPrompt(`Factorise ${q}.`);setMethod(`Find two numbers that <b>multiply</b> to the number on the end and <b>add</b> to the number in front of x. Then write (x + one)(x + the other). Check by expanding.`);
+      askOpts(shuffle(uniq([[r,'r'],[w1,'w1'],[w2,'w2'],[w3,'w3']])),'r',()=>showFact(`Find two numbers that multiply to ${N(a*b)} and add to ${N(a+b)}: ${N(a)} and ${N(b)}. So ${q} = ${r}.`),()=>`Find two numbers that multiply to ${N(a*b)} and add to ${N(a+b)}.`);
+    }
+  },
+  sequences:{
+    title:'Sequences',seal:'数列',
+    tip:'In a linear sequence the terms go up or down by the same amount each time. That difference is the number in front of n in the nth term; then adjust with the zero term (the term before the first). A quadratic sequence has a constant second difference.',
+    levels:{easy:'Year 7: next terms and term-to-term rules.',medium:'Year 8: finding the nth term.',hard:'Year 9: using the nth term, and quadratic sequences.'},
+    round(){
+      let d,c;const seq=(d,c,k=5)=>Array.from({length:k},(_,i)=>d*(i+1)+c);
+      if(level==='easy'){
+        fresh('seq',()=>{d=randNZ(-7,9);c=rand(-10,15);return `${d},${c}`});
+        const s=seq(d,c,6),ask=Math.random()<.6;
+        if(ask){stage.innerHTML=`<div class="sum">${s.slice(0,4).map(N).join(', ')}, ?</div>`;setPrompt('What is the next term?');setMethod('Find the <b>difference</b> between neighbouring terms. In a linear sequence it is the same each time, so add it to the last term.');
+          return askNumber({answer:s[4],onRight:()=>{fillQ(N(s[4]));showFact(`The rule is ${d>0?'add':'subtract'} ${Math.abs(d)} each time: ${N(s[3])} ${d>0?'+':'−'} ${Math.abs(d)} = ${N(s[4])}.`)},onWrong:()=>'Find the difference between neighbouring terms.'})}
+        stage.innerHTML=`<div class="sum">${s.slice(0,5).map(N).join(', ')}</div>`;setPrompt('What is the term-to-term rule?');setMethod('Look at how you get from one term to the next. Work out the difference between neighbouring terms and check it is the same all along.');
+        const r=`${d>0?'Add':'Subtract'} ${Math.abs(d)}`,w=[`${d>0?'Subtract':'Add'} ${Math.abs(d)}`,`Add ${Math.abs(d)+1}`,`Multiply by ${Math.abs(d)}`].filter(x=>x!==r);
+        return askOpts(shuffle([r,...w.slice(0,2)]).map(v=>({label:v})),r,()=>showFact(`Each term is ${Math.abs(d)} ${d>0?'more':'less'} than the one before.`));
+      }
+      if(level==='medium'){
+        fresh('seq',()=>{d=randNZ(-5,8);c=rand(-8,10);return `${d},${c}`});
+        const s=seq(d,c),r=lin(d,c,'n'),w1=lin(1,d+c,'n'),w2=lin(d,c+d,'n'),w3=lin(c||2,d,'n');
+        stage.innerHTML=`<div class="sum">${s.map(N).join(', ')} …</div>`;setPrompt(`Find the ${V('n')}th term of this sequence.`);setMethod('1. Find the common difference d: the nth term starts with d<i class="v">n</i>. 2. Write out d<i class="v">n</i> for n = 1, 2, 3. 3. Compare with the sequence: what do you add or take away to get each term?');
+        return askOpts(shuffle(uniq([[r,'r'],[w1,'w1'],[w2,'w2'],[w3,'w3']])),'r',()=>showFact(`The difference is ${N(d)}, so start with ${lin(d,0,'n')}. ${lin(d,0,'n')} gives ${seq(d,0,3).map(N).join(', ')}…; the sequence is ${c>=0?c+' more':Math.abs(c)+' less'}. So ${r}.`),o=>o.value==='w1'?`The difference is ${N(d)}, so the n term is ${N(d)}n.`:o.value==='w2'?`Check: put n = 1 into it. Do you get ${N(s[0])}?`:'The number in front of n is the difference between terms.');
+      }
+      const kind=pick(['use','use','member','quad']);
+      if(kind==='use'){
+        fresh('seq',()=>{d=randNZ(-6,9);c=rand(-12,12);return `${d},${c}`});const n=pick([10,12,20,25,50,100]);
+        stage.innerHTML=`<div class="sum">${lin(d,c,'n')}</div>`;setPrompt(`The ${V('n')}th term is ${lin(d,c,'n')}. What is term ${n}?`);setMethod('Substitute the term number for <i class="v">n</i>, then work it out with BIDMAS (multiply first).');
+        return askNumber({answer:d*n+c,onRight:()=>showFact(`Put ${V('n')} = ${n}: ${N(d)} × ${n} ${c<0?'−':'+'} ${Math.abs(c)} = ${N(d*n+c)}.`),onWrong:()=>`Replace n with ${n}.`});
+      }
+      if(kind==='member'){
+        fresh('seq',()=>{d=rand(3,9);c=rand(-5,8);return `${d},${c}`});const t=Math.random()<.5?d*rand(10,30)+c:d*rand(10,30)+c+rand(1,d-1);const yes=(t-c)%d===0;
+        stage.innerHTML=`<div class="sum">${lin(d,c,'n')}</div>`;setPrompt(`Is ${t} a term in the sequence with ${V('n')}th term ${lin(d,c,'n')}?`);setMethod('Set the nth term equal to the number and solve the equation. If n comes out as a <b>whole number</b>, the number is in the sequence.');
+        return askOpts([{label:'Yes',value:true},{label:'No',value:false}],yes,()=>showFact(`Solve ${lin(d,c,'n')} = ${t}: ${V('n')} = ${fmt((t-c)/d)}. ${yes?'A whole number, so yes, it is term '+((t-c)/d)+'.':'Not a whole number, so no.'}`),()=>`Set ${plain(lin(d,c,'n'))} = ${t} and solve for n.`);
+      }
+      const a=rand(1,3),b=rand(-3,4),cc=rand(-2,6),s=Array.from({length:5},(_,i)=>a*(i+1)**2+b*(i+1)+cc);
+      stage.innerHTML=`<div class="sum">${s.slice(0,4).map(N).join(', ')}, ?</div>`;setPrompt('This is a quadratic sequence. What is the next term?');setMethod('Find the first differences between terms, then the differences between those (the <b>second differences</b>). The second difference stays the same, so build forwards from it.');
+      const d1=s.slice(1).map((v,i)=>v-s[i]);
+      askNumber({answer:s[4],onRight:()=>{fillQ(N(s[4]));showFact(`First differences: ${d1.slice(0,3).join(', ')}. Second difference: ${2*a}. Next first difference: ${d1[3]}, so ${s[3]} + ${d1[3]} = ${s[4]}.`)},onWrong:()=>'Find the differences, then the differences between those.'});
+    }
+  },
+  geometry:{
+    title:'Angles, Area and Pythagoras',seal:'勾股定理',
+    tip:'Angles on a straight line add to 180°, angles in a triangle add to 180°, and angles around a point add to 360°. Area of a triangle = ½ × base × height; trapezium = ½ × (a + b) × height; circle = πr². Pythagoras: in a right-angled triangle, a² + b² = c², where c is the longest side. Chinese mathematicians called it the gōu gǔ theorem, from the sides of a carpenter\'s square, and wrote 勾三股四弦五: "base 3, height 4, hypotenuse 5".',
+    levels:{easy:'Year 7: angles on a line, around a point and in a triangle.',medium:'Year 8: areas of triangles, parallelograms, trapeziums and circles.',hard:'Year 9: Pythagoras\' theorem.'},
+    round(){
+      const svg=(w,h,body)=>`<svg class="diagram" viewBox="0 0 ${w} ${h}" role="img" aria-label="Diagram">${body}</svg>`;
+      const T=(x,y,t,a='middle',c='var(--ink)')=>`<text x="${x}" y="${y}" text-anchor="${a}" style="fill:${c}">${t}</text>`;
+      if(level==='easy'){
+        const kind=pick(['line','point','tri']);
+        if(kind==='line'){
+          const a=rand(25,155),r=a*Math.PI/180,x=180-a;
+          stage.innerHTML=svg(360,150,`<line x1="20" y1="120" x2="340" y2="120" stroke="var(--ink)" stroke-width="3"/><line x1="180" y1="120" x2="${180+130*Math.cos(Math.PI-r)}" y2="${120-130*Math.sin(r)}" stroke="var(--ink)" stroke-width="3"/>${T(180-50*Math.cos(r/2),112-30*Math.sin(r/2)+4,'x','middle','var(--coral)')}${T(180+55*Math.cos((Math.PI-r)/2+0),112-30*Math.sin((Math.PI-r)/2),a+'°')}`);
+          setPrompt('Find the angle marked x.');setMethod('Angles on a <b>straight line</b> add up to 180°. Take the angle you know away from 180°.');
+          return askNumber({answer:x,unit:'°',onRight:()=>showFact(`Angles on a straight line add to 180°: 180 − ${a} = ${x}°.`),onWrong:()=>'Angles on a straight line add up to 180°.'});
+        }
+        if(kind==='point'){
+          const a=rand(60,140),b=rand(50,140),x=360-a-b;
+          if(x<30)return this.round();
+          const ang=[0,a,a+b].map(v=>v*Math.PI/180),cx=180,cy=95;
+          const ray=t=>`<line x1="${cx}" y1="${cy}" x2="${cx+80*Math.cos(t)}" y2="${cy-80*Math.sin(t)}" stroke="var(--ink)" stroke-width="3"/>`;
+          const lab=(t1,t2,txt,col)=>{const m=(t1+t2)/2;return T(cx+46*Math.cos(m),cy-46*Math.sin(m)+5,txt,'middle',col)};
+          stage.innerHTML=svg(360,190,`${ang.map(ray).join('')}<circle cx="${cx}" cy="${cy}" r="4" fill="var(--ink)"/>${lab(ang[0],ang[1],a+'°')}${lab(ang[1],ang[2],b+'°')}${lab(ang[2],2*Math.PI,'x','var(--coral)')}`);
+          setPrompt('Find the angle marked x.');setMethod('Angles <b>around a point</b> add up to 360°. Add the angles you know, then take the total away from 360°.');
+          return askNumber({answer:x,unit:'°',onRight:()=>showFact(`Angles around a point add to 360°: 360 − ${a} − ${b} = ${x}°.`),onWrong:()=>'Angles around a point add up to 360°.'});
+        }
+        const A=rand(35,85),B=rand(35,85),x=180-A-B,ra=A*Math.PI/180,rb=B*Math.PI/180;
+        const base=230,h=base*Math.sin(ra)*Math.sin(rb)/Math.sin(ra+rb),cx=60+h/Math.tan(ra);
+        const H=Math.min(h,140),sc=H/h,px=60,py=160;
+        stage.innerHTML=svg(360,190,`<polygon points="${px},${py} ${px+base},${py} ${px+(cx-px)},${py-h*sc}" fill="var(--violet-soft)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>${T(px+26,py-8,A+'°')}${T(px+base-26,py-8,B+'°')}${T(px+(cx-px),py-h*sc+26,'x','middle','var(--coral)')}`);
+        setPrompt('Find the angle marked x in the triangle.');setMethod('The angles in a <b>triangle</b> add up to 180°. Add the two you know, then take that away from 180°.');
+        return askNumber({answer:x,unit:'°',onRight:()=>showFact(`Angles in a triangle add to 180°: 180 − ${A} − ${B} = ${x}°.`),onWrong:()=>'The three angles in a triangle add up to 180°.'});
+      }
+      if(level==='medium'){
+        const kind=pick(['tri','para','trap','circle']);
+        if(kind==='circle'){
+          const r=rand(2,12),askC=Math.random()<.4,ans=+(askC?2*Math.PI*r:Math.PI*r*r).toFixed(1);
+          stage.innerHTML=svg(360,170,`<circle cx="180" cy="85" r="70" fill="var(--teal-soft)" stroke="var(--ink)" stroke-width="3"/><line x1="180" y1="85" x2="250" y2="85" stroke="var(--coral)" stroke-width="3"/><circle cx="180" cy="85" r="4"/>${T(215,78,r+' cm','middle','var(--coral)')}`);
+          setPrompt(`Find the ${askC?'circumference':'area'} of the circle. Give your answer to 1 decimal place.`);setMethod(askC?'Circumference = 2 × π × radius (or π × diameter). Use the π key on a calculator, or 3.142, and round to 1 decimal place.':'Area = π × radius². Square the radius first, then multiply by π (3.142), and round to 1 decimal place.');
+          return askNumber({answer:ans,unit:askC?'cm':'cm²',tol:.051,onRight:()=>showFact(askC?`C = 2πr = 2 × π × ${r} = ${ans} cm`:`A = πr² = π × ${r}² = ${ans} cm²`),onWrong:()=>askC?'Circumference = 2 × π × radius.':'Area = π × radius × radius. Square the radius first.'});
+        }
+        const b=rand(4,14),h=rand(3,10),a2=rand(2,b-1);
+        let A,f,shape;
+        if(kind==='tri'){A=b*h/2;f=`½ × ${b} × ${h} = ${fmt(A)} cm²`;shape=`<polygon points="60,150 ${60+b*18},150 ${60+b*7},${150-h*12}" fill="var(--amber-soft)" stroke="var(--ink)" stroke-width="3"/><line x1="${60+b*7}" y1="${150-h*12}" x2="${60+b*7}" y2="150" stroke="var(--ink-soft)" stroke-dasharray="5 4" stroke-width="2"/>${T(60+b*9,168,b+' cm')}${T(60+b*7+8,150-h*6,h+' cm','start')}`}
+        else if(kind==='para'){A=b*h;f=`${b} × ${h} = ${A} cm²`;shape=`<polygon points="50,150 ${50+b*16},150 ${80+b*16},${150-h*12} 80,${150-h*12}" fill="var(--amber-soft)" stroke="var(--ink)" stroke-width="3"/><line x1="80" y1="${150-h*12}" x2="80" y2="150" stroke="var(--ink-soft)" stroke-dasharray="5 4" stroke-width="2"/>${T(50+b*8,168,b+' cm')}${T(86,150-h*6,h+' cm','start')}`}
+        else{A=(a2+b)*h/2;f=`½ × (${a2} + ${b}) × ${h} = ${fmt(A)} cm²`;const off=(b-a2)*8;shape=`<polygon points="50,150 ${50+b*16},150 ${50+off+a2*16},${150-h*12} ${50+off},${150-h*12}" fill="var(--amber-soft)" stroke="var(--ink)" stroke-width="3"/><line x1="${50+off}" y1="${150-h*12}" x2="${50+off}" y2="150" stroke="var(--ink-soft)" stroke-dasharray="5 4" stroke-width="2"/>${T(50+b*8,168,b+' cm')}${T(50+off+a2*8,150-h*12-8,a2+' cm')}${T(56+off,150-h*6,h+' cm','start')}`}
+        stage.innerHTML=svg(Math.max(360,70+b*18),178,shape);
+        setPrompt(`Find the area of the ${kind==='tri'?'triangle':kind==='para'?'parallelogram':'trapezium'}.`);setMethod(kind==='tri'?'Area of a triangle = ½ × base × <b>perpendicular</b> height (the dashed line).':kind==='para'?'Area of a parallelogram = base × <b>perpendicular</b> height (the dashed line), not the slanted side.':'Area of a trapezium = ½ × (a + b) × h: add the two parallel sides, multiply by the height, then halve.');
+        return askNumber({answer:A,unit:'cm²',onRight:()=>showFact(f),onWrong:v=>kind==='tri'&&v===b*h?'That\'s the rectangle around it. A triangle is half of that.':kind==='trap'?'Add the parallel sides, multiply by the height, then halve.':'Use the perpendicular height, not the slanted side.'});
+      }
+      const triples=[[3,4,5],[5,12,13],[8,15,17],[7,24,25],[6,8,10],[9,12,15],[20,21,29]];
+      const exact=Math.random()<.7;let a,b,c;
+      if(exact){const k=Math.random()<.3?2:1;[a,b,c]=pick(triples).map(v=>v*k)}
+      else{a=rand(3,12);b=rand(3,12);c=+Math.hypot(a,b).toFixed(1)}
+      const askHyp=!exact||Math.random()<.6;
+      const sx=220/Math.max(a,b),W=a*sx,Hh=b*sx*.7>150?150:b*sx*.7;
+      const lbl=(t,x,y,anc,col)=>T(x,y,t,anc,col);
+      stage.innerHTML=svg(360,200,`<polygon points="60,180 ${60+W},180 60,${180-Hh}" fill="var(--coral-soft)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/><path d="M60 162h18v18" fill="none" stroke="var(--ink)" stroke-width="2"/>
+        ${lbl(a+' cm',60+W/2,198)}${lbl(askHyp?b+' cm':'?',52,180-Hh/2+5,'end',askHyp?'var(--ink)':'var(--coral)')}${lbl(askHyp?'?':c+' cm',60+W/2+14,180-Hh/2-8,'start',askHyp?'var(--coral)':'var(--ink)')}`);
+      const ans=askHyp?c:b;
+      setPrompt(askHyp?`Find the length of the hypotenuse${exact?'':', to 1 decimal place'}.`:'Find the missing side.');setMethod(askHyp?'<b>Pythagoras</b>: a² + b² = c², where c is the longest side (the hypotenuse, opposite the right angle). Square the two shorter sides, add them, then square root.':'<b>Pythagoras</b> rearranged: square the hypotenuse, take away the square of the side you know, then square root. The answer must be shorter than the hypotenuse.');
+      askNumber({answer:ans,unit:'cm',tol:exact?1e-9:.051,onRight:()=>showFact(askHyp?`${a}² + ${b}² = ${a*a} + ${b*b} = ${a*a+b*b}, so c = √${a*a+b*b} = ${c} cm.${a===3&&b===4?' This is 勾三股四弦五!':''}`:`${c}² − ${a}² = ${c*c} − ${a*a} = ${c*c-a*a}, so the side is √${c*c-a*a} = ${b} cm.`),
+        onWrong:v=>askHyp?(v===a+b?'Not just adding: square both sides, add, then square root.':'Square the two shorter sides, add them, then take the square root.'):'The hypotenuse is the longest side: c² − a², then square root.'});
+    }
+  }
+};
+
+/* ---------- navigation ---------- */
+const home=$('#home'),game=$('#game'),homeBtn=$('#homeBtn');
+function play(){stopTimers();misses=0;methodHTML='';$('#methodRow').hidden=true;current.round()}
+function setTip(){$('#gTip').textContent=current.tip+' '+current.levels[level]}
+document.querySelectorAll('.tile').forEach(t=>t.onclick=()=>{
+  sfx.click();current=GAMES[t.dataset.game];
+  const seal=$('#gSeal'),cs=getComputedStyle(t);seal.textContent=current.seal;seal.style.setProperty('--cs',cs.getPropertyValue('--cs'));seal.style.setProperty('--cd',cs.getPropertyValue('--cd'));
+  $('#gTitle').textContent=current.title;setTip();showStreak();
+  document.body.classList.add('in-game');home.hidden=true;game.hidden=false;homeBtn.hidden=false;window.scrollTo(0,0);
+  play();
+});
+homeBtn.onclick=()=>{sfx.click();stopTimers();keyHandler=null;try{speechSynthesis.cancel()}catch(e){}game.hidden=true;home.hidden=false;homeBtn.hidden=true;document.body.classList.remove('in-game');window.scrollTo(0,0)};
+$('#pandaBtn').onclick=e=>{const b=e.currentTarget;b.classList.remove('wiggle');void b.offsetWidth;b.classList.add('wiggle');sfx.yay();say(xp?`Hey, it's Bao. You're on level ${lvOf(xp)} with ${xp} XP. Pick a topic.`:"Hey, it's Bao. Pick a topic and let's get some XP.",true)};
+
+/* ---------- year group ---------- */
+function showLevel(){document.querySelectorAll('.lv').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.level===level)))}
+showLevel();
+document.querySelectorAll('.lv').forEach(b=>b.onclick=()=>{
+  if(b.dataset.level===level)return;
+  level=b.dataset.level;
+  try{localStorage.setItem('gpm-level',level)}catch(e){}
+  showLevel();sfx.click();
+  if(!game.hidden){setTip();play()}
+});
+
+/* ---------- read aloud setting ---------- */
+function showRead(){document.querySelectorAll('#readChips .chip-btn').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.read==='on')===readAloud)))}
+showRead();
+document.querySelectorAll('#readChips .chip-btn').forEach(b=>b.onclick=()=>{
+  readAloud=b.dataset.read==='on';try{localStorage.setItem('gpm-read',readAloud?'on':'off')}catch(e){}
+  showRead();sfx.click();if(readAloud)say('Questions will be read aloud.');
+});
+
+/* ---------- level up + confetti ---------- */
+function showCheer(){
+  if(!$('#timesUp').hidden)return;
+  $('#cheerTitle').textContent=`Level ${lvOf(xp)}!`;
+  $('#cheerText').textContent=`${xp} XP${streak>1?` and a streak of ${streak}`:''}. Bao is impressed.`;
+  $('#cheer').hidden=false;burst(140);say(`Level up! You reached level ${lvOf(xp)}.`);
+}
+$('#cheerBtn').onclick=()=>{sfx.click();$('#cheer').hidden=true};
+
+const cv=$('#confetti'),cx=cv.getContext('2d');let parts=[],running=false;
+const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+function palette(){const s=getComputedStyle(document.documentElement);return['--coral','--amber','--teal','--indigo','--violet'].map(v=>s.getPropertyValue(v).trim())}
+function burst(n){
+  if(reduce)return;
+  const dpr=window.devicePixelRatio||1;cv.width=innerWidth*dpr;cv.height=innerHeight*dpr;cx.setTransform(dpr,0,0,dpr,0,0);
+  const cols=palette();
+  for(let i=0;i<n;i++)parts.push({x:innerWidth/2+(Math.random()-.5)*80,y:innerHeight*.45,vx:(Math.random()-.5)*13,vy:-Math.random()*13-4,r:4+Math.random()*5,c:cols[i%cols.length],rot:Math.random()*6,vr:(Math.random()-.5)*.4,life:0});
+  if(!running){running=true;requestAnimationFrame(tick)}
+}
+function tick(){
+  cx.clearRect(0,0,innerWidth,innerHeight);
+  parts=parts.filter(p=>p.life<110&&p.y<innerHeight+30);
+  parts.forEach(p=>{p.life++;p.vy+=.38;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillStyle=p.c;cx.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);cx.restore()});
+  if(parts.length)requestAnimationFrame(tick);else{running=false;cx.clearRect(0,0,innerWidth,innerHeight)}
+}
+
+/* ---------- reset XP ---------- */
+const resetRow=$('#resetRow'),confirmRow=$('#confirmRow');
+$('#resetBtn').onclick=()=>{sfx.click();$('#confirmText').textContent=`Reset ${xp} XP to 0?`;resetRow.hidden=true;confirmRow.hidden=false};
+$('#resetNo').onclick=()=>{sfx.click();confirmRow.hidden=true;resetRow.hidden=false};
+$('#resetYes').onclick=()=>{
+  xp=0;streak=0;try{localStorage.setItem('gpm-xp','0')}catch(e){}
+  if(timer.end){timer.base=0;saveTimer()}
+  showXP();showStreak();sfx.click();confirmRow.hidden=true;resetRow.hidden=false;
+};
+showXP();
+
+/* ---------- study timer ---------- */
+/* The end time is saved, so reloading the page doesn't restart the countdown */
+const timerPill=$('#timerPill'),timerText=$('#timerText'),timesUpBox=$('#timesUp');
+let timer={end:0,base:0,min:0,warned:false},ticker=null,lastBase=0;
+try{const t=JSON.parse(localStorage.getItem('gpm-timer')||'null');if(t&&t.end>Date.now())timer=t}catch(e){}
+function saveTimer(){try{if(timer.end)localStorage.setItem('gpm-timer',JSON.stringify(timer));else localStorage.removeItem('gpm-timer')}catch(e){}}
+const clock=ms=>{const s=Math.max(0,Math.ceil(ms/1000));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+function setTimer(min,base){
+  timer=min?{end:Date.now()+min*60000,base:base??xp,min,warned:false}:{end:0,base:0,min:0,warned:false};
+  saveTimer();renderTimer();
+}
+function renderTimer(){
+  const on=timer.end>0;
+  timerPill.hidden=!on;document.body.classList.toggle('timing',on);
+  document.querySelectorAll('#timerChips .chip-btn').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.min===(on?timer.min:0))));
+  $('#timerStatus').hidden=!on;
+  clearInterval(ticker);
+  if(on){updateTimer();ticker=setInterval(updateTimer,1000)}
+}
+function updateTimer(){
+  const left=timer.end-Date.now();
+  timerText.textContent=clock(left);
+  timerPill.setAttribute('aria-label',`Study time left: ${clock(left)}`);
+  $('#timerStatus').textContent=`${clock(left)} left. Session ends at ${new Date(timer.end).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})}.`;
+  timerPill.classList.toggle('low',left<=60000);
+  if(left>0&&left<=60000&&!timer.warned){timer.warned=true;saveTimer();say('One minute left.',true)}
+  if(left<=0)timesUp();
+}
+function timesUp(){
+  const earned=Math.max(0,xp-timer.base);
+  lastBase=timer.base;setTimer(0);stopTimers();keyHandler=null;
+  $('#tuText').textContent=earned?`You earned ${earned} XP this session. Nice work.`:'Session complete.';
+  $('#cheer').hidden=true;timesUpBox.hidden=false;burst(100);
+  say(`Session over. ${earned?`You earned ${earned} XP.`:''}`,true);
+}
+document.querySelectorAll('#timerChips .chip-btn').forEach(b=>b.onclick=()=>{sfx.click();setTimer(+b.dataset.min)});
+$('#tuDone').onclick=()=>{sfx.click();timesUpBox.hidden=true;if(!game.hidden)homeBtn.click()};
+/* Holding for 2 seconds stops an accidental tap adding time */
+const more=$('#tuMore');let holdT=null;
+more.addEventListener('pointerdown',e=>{
+  e.preventDefault();more.classList.add('holding');
+  holdT=setTimeout(()=>{more.classList.remove('holding');timesUpBox.hidden=true;setTimer(5,lastBase);sfx.yay()},2000);
+});
+['pointerup','pointerleave','pointercancel'].forEach(ev=>more.addEventListener(ev,()=>{clearTimeout(holdT);more.classList.remove('holding')}));
+more.addEventListener('contextmenu',e=>e.preventDefault());
+renderTimer();
+})();
+</script>
+</body>
+</html>
